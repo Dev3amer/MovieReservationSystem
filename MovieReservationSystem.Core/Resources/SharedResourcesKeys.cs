@@ -21,5 +21,6 @@
         public const string InvalidEmail = "Invalid Email!";
         public const string InvalidConfirmPassword = "Doesn't Match Password!";
         public const string IncorrectPassword = "Incorrect Password";
+        public const string InvalidUserName = "Invalid Username!";
     }
 }

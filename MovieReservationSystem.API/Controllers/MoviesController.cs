@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Movies.Commands.Models;
@@ -9,6 +10,7 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MoviesController : AppController
     {
         #region Constructors
@@ -18,6 +20,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+        [AllowAnonymous]
         [HttpGet(Router.MovieRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllMoviesAsync()
@@ -33,6 +36,8 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(new GetMovieByIdQuery() { Id = id });
             return NewResult(result);
         }
+
+        [AllowAnonymous]
         [HttpGet(Router.MovieRouting.PaginatedList)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetMoviesPaginatedList([FromQuery] GetMoviesPaginatedListQuery model)
