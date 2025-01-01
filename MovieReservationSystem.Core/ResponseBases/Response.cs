@@ -14,6 +14,6 @@ namespace MovieReservationSystem.Core.Response
         public bool Succeeded { get; set; }
         public object? Meta { get; set; }
         public List<string>? Errors { get; set; }
-        public T Data { get; set; }
+        public T? Data { get; set; }
     }
 }

@@ -4,13 +4,14 @@ namespace MovieReservationSystem.Core.Response
 {
     public class ResponseHandler
     {
-        public Response<T> Deleted<T>(string Message = null)
+        public Response<bool> Deleted<T>(string Message = null)
         {
-            return new Response<T>()
+            return new Response<bool>()
             {
                 StatusCode = System.Net.HttpStatusCode.OK,
                 Succeeded = true,
-                Message = Message == null ? SharedResourcesKeys.Deleted : Message
+                Message = Message == null ? SharedResourcesKeys.Deleted : Message,
+                Data = true
             };
         }
         public Response<T> Success<T>(T entity, object Meta = null)
