@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MovieReservationSystem.Core.Features.Users.Queries.Results;
-using MovieReservationSystem.Core.ResponseBases;
+using MovieReservationSystem.Core.Response;
 
 namespace MovieReservationSystem.Core.Features.Users.Queries.Models
 {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Movies.Commands.Models;
 using MovieReservationSystem.Core.Features.Movies.Queries.Models;
+using MovieReservationSystem.Core.Features.Reservations.Commands.Models;
 using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers

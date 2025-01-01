@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MovieReservationSystem.Core.Features.Authentication.Commands.Models;
 using MovieReservationSystem.Core.Resources;
-using MovieReservationSystem.Core.ResponseBases;
+using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Data.Entities.Identity;
 using MovieReservationSystem.Service.Abstracts;
 

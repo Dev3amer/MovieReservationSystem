@@ -20,6 +20,7 @@ namespace MovieReservationSystem.Infrastructure.Context
         public DbSet<MovieActor> MovieActors { get; set; }
         public DbSet<Director> Directors { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<ReservationSeat> ReservationSeats { get; set; }
         #endregion
 
         #region Constructors

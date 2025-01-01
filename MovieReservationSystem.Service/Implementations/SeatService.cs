@@ -27,7 +27,10 @@ namespace MovieReservationSystem.Service.Implementations
                 .Include(s => s.Hall)
                 .ToListAsync();
         }
-
+        public IQueryable<Seat> GetAllQueryable()
+        {
+            return _seatRepository.GetTableAsTracking().Include(s => s.SeatType).AsQueryable();
+        }
         public async Task<Seat> GetByIdAsync(int id)
         {
             return await _seatRepository.GetTableAsTracking()
@@ -71,6 +74,29 @@ namespace MovieReservationSystem.Service.Implementations
                 .Where(s => s.HallId == hallId)
                 .CountAsync();
         }
+
+        public async Task<bool> IsExistAsync(int id)
+        {
+            return await _seatRepository.GetTableNoTracking()
+                .AnyAsync(s => s.SeatId == id);
+        }
+        public decimal CalculateSeatsPrice(IEnumerable<Seat> seatsList)
+        {
+            decimal price = 0;
+            foreach (var seat in seatsList)
+            {
+                price += seat.SeatType.SeatTypePrice;
+            }
+            return price;
+        }
+
+        public async Task<bool> IsExistBySeatIdInHallAsync(int seatId, int hallId)
+        {
+            return await _seatRepository.GetTableNoTracking()
+                .AnyAsync(s => s.SeatId == seatId && s.Hall.HallId == hallId);
+        }
+
+
         #endregion
     }
 }

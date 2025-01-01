@@ -8,6 +8,6 @@
         public byte SeatTypeId { get; set; }
         public Hall Hall { get; set; } = new();
         public SeatType SeatType { get; set; } = new();
-        public Reservation? Reservation { get; set; }
+        public virtual ICollection<Reservation>? Reservations { get; set; }
     }
 }

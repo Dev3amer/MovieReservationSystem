@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MovieReservationSystem.Core.ResponseBases
+namespace MovieReservationSystem.Core.Response
 {
     public class Response<T>
     {

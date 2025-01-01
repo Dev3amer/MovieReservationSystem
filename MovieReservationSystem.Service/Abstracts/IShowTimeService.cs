@@ -9,6 +9,7 @@ namespace MovieReservationSystem.Service.Abstracts
         Task<ShowTime> AddAsync(ShowTime showTime);
         Task<ShowTime> EditAsync(ShowTime showTime);
         Task<bool> IsExistAsync(int showTimeId);
+        Task<bool> IsExistAndInFutureAsync(int showTimeId);
         Task<bool> IsExistInSameHallAsync(int hallId, TimeOnly startTime, TimeOnly endTime);
         Task<bool> IsExistInSameHallExcludeItselfAsync(int showTimeId, int hallId, TimeOnly startTime, TimeOnly endTime);
         Task<bool> DeleteAsync(ShowTime showTime);

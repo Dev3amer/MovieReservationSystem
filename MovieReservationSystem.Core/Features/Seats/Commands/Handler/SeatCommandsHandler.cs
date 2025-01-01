@@ -3,7 +3,7 @@ using MediatR;
 using MovieReservationSystem.Core.Features.Seats.Commands.Models;
 using MovieReservationSystem.Core.Features.Seats.Queries.Results;
 using MovieReservationSystem.Core.Resources;
-using MovieReservationSystem.Core.ResponseBases;
+using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Data.Entities;
 using MovieReservationSystem.Service.Abstracts;
 

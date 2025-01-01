@@ -391,10 +391,10 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 {
                     ReservationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ReservationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FinalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ShowTimeId = table.Column<int>(type: "int", nullable: false),
-                    SeatId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -403,17 +403,38 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                         name: "FK_Reservations_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Reservations_Seats_SeatId",
-                        column: x => x.SeatId,
-                        principalTable: "Seats",
-                        principalColumn: "SeatId");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Reservations_ShowTimes_ShowTimeId",
                         column: x => x.ShowTimeId,
                         principalTable: "ShowTimes",
-                        principalColumn: "ShowTimeId");
+                        principalColumn: "ShowTimeId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReservationSeats",
+                columns: table => new
+                {
+                    ReservationId = table.Column<int>(type: "int", nullable: false),
+                    SeatId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReservationSeats", x => new { x.ReservationId, x.SeatId });
+                    table.ForeignKey(
+                        name: "FK_ReservationSeats_Reservations_ReservationId",
+                        column: x => x.ReservationId,
+                        principalTable: "Reservations",
+                        principalColumn: "ReservationId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReservationSeats_Seats_SeatId",
+                        column: x => x.SeatId,
+                        principalTable: "Seats",
+                        principalColumn: "SeatId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -513,12 +534,6 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 column: "DirectorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reservations_SeatId",
-                table: "Reservations",
-                column: "SeatId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Reservations_ShowTimeId",
                 table: "Reservations",
                 column: "ShowTimeId");
@@ -527,6 +542,11 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 name: "IX_Reservations_UserId",
                 table: "Reservations",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReservationSeats_SeatId",
+                table: "ReservationSeats",
+                column: "SeatId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Seats_HallId",
@@ -580,7 +600,7 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 name: "MovieGenres");
 
             migrationBuilder.DropTable(
-                name: "Reservations");
+                name: "ReservationSeats");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -592,10 +612,13 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Reservations");
 
             migrationBuilder.DropTable(
                 name: "Seats");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "ShowTimes");

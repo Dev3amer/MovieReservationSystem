@@ -1,6 +1,6 @@
 ﻿using MovieReservationSystem.Core.Resources;
 
-namespace MovieReservationSystem.Core.ResponseBases
+namespace MovieReservationSystem.Core.Response
 {
     public class ResponseHandler
     {

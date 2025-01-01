@@ -22,5 +22,8 @@
         public const string InvalidConfirmPassword = "Doesn't Match Password!";
         public const string IncorrectPassword = "Incorrect Password";
         public const string InvalidUserName = "Invalid Username!";
+        public const string SeatReserved = "Seat already reserved in this show time";
+        public const string BadCancelRequest = "Cancelation available before 24 hours only!";
+        public const string EndedShowTime = "Show time has ended!";
     }
 }

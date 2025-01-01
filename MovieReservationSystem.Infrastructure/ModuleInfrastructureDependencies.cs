@@ -18,6 +18,7 @@ namespace MovieReservationSystem.Infrastructure
             services.AddTransient<IActorRepository, ActorRepository>();
             services.AddTransient<ISeatRepository, SeatRepository>();
             services.AddTransient<IShowTimeRepository, ShowTimeRepository>();
+            services.AddTransient<IReservationRepository, ReservationRepository>();
         }
     }
 }

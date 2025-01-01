@@ -3,7 +3,7 @@ using MediatR;
 using MovieReservationSystem.Core.Features.Actors.Queries.Models;
 using MovieReservationSystem.Core.Features.Actors.Queries.Results;
 using MovieReservationSystem.Core.Resources;
-using MovieReservationSystem.Core.ResponseBases;
+using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Actors.Queries.Handler

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MovieReservationSystem.Core.ResponseBases;
+using MovieReservationSystem.Core.Response;
 
 namespace MovieReservationSystem.Core.Features.Directors.Commands.Models
 {

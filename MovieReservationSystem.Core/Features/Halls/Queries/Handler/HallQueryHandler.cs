@@ -5,7 +5,7 @@ using MovieReservationSystem.Core.Features.Halls.Queries.Results;
 using MovieReservationSystem.Core.Features.ShowTimes.Queries.Models;
 using MovieReservationSystem.Core.Features.ShowTimes.Queries.Results;
 using MovieReservationSystem.Core.Resources;
-using MovieReservationSystem.Core.ResponseBases;
+using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Halls.Queries.Handler

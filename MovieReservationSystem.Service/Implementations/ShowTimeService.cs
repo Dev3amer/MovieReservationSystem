@@ -79,6 +79,12 @@ namespace MovieReservationSystem.Service.Implementations
         {
             return await _showTimeRepository.GetTableNoTracking().AnyAsync(st => st.ShowTimeId == id);
         }
+
+        public async Task<bool> IsExistAndInFutureAsync(int showTimeId)
+        {
+            var showTime = await _showTimeRepository.GetTableAsTracking().FirstOrDefaultAsync(st => st.ShowTimeId == showTimeId);
+            return showTime.Day.ToDateTime(showTime.EndTime) > DateTime.Now;
+        }
         #endregion
     }
 }

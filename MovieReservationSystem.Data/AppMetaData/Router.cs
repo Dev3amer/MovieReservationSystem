@@ -124,5 +124,18 @@
 
             public const string SignIn = Prefix + "SignIn";
         }
+        public static class ReservationRouting
+        {
+            public const string Prefix = Rule + "Reservation/";
+
+            public const string list = Prefix + "List";
+            public const string PaginatedList = Prefix + "PaginatedList";
+            public const string GetById = Prefix + SingleRoute;
+
+
+            public const string Create = Prefix + "Create";
+            public const string Edit = Prefix + "Edit";
+            public const string Delete = Prefix + SingleRoute;
+        }
     }
 }

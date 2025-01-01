@@ -12,7 +12,7 @@ using MovieReservationSystem.Infrastructure.Context;
 namespace MovieReservationSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241225214845_init")]
+    [Migration("20241231042740_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -502,25 +502,38 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                     b.Property<decimal>("FinalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("SeatId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("ReservationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ShowTimeId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ReservationId");
-
-                    b.HasIndex("SeatId")
-                        .IsUnique();
 
                     b.HasIndex("ShowTimeId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Reservations", (string)null);
+                });
+
+            modelBuilder.Entity("MovieReservationSystem.Data.Entities.ReservationSeat", b =>
+                {
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SeatId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReservationId", "SeatId");
+
+                    b.HasIndex("SeatId");
+
+                    b.ToTable("ReservationSeats", (string)null);
                 });
 
             modelBuilder.Entity("MovieReservationSystem.Data.Entities.Seat", b =>
@@ -750,26 +763,39 @@ namespace MovieReservationSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("MovieReservationSystem.Data.Entities.Reservation", b =>
                 {
-                    b.HasOne("MovieReservationSystem.Data.Entities.Seat", "Seat")
-                        .WithOne("Reservation")
-                        .HasForeignKey("MovieReservationSystem.Data.Entities.Reservation", "SeatId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("MovieReservationSystem.Data.Entities.ShowTime", "ShowTime")
                         .WithMany("Reservations")
                         .HasForeignKey("ShowTimeId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("MovieReservationSystem.Data.Entities.Identity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Seat");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ShowTime");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MovieReservationSystem.Data.Entities.ReservationSeat", b =>
+                {
+                    b.HasOne("MovieReservationSystem.Data.Entities.Reservation", "Reservation")
+                        .WithMany()
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieReservationSystem.Data.Entities.Seat", "Seat")
+                        .WithMany()
+                        .HasForeignKey("SeatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reservation");
+
+                    b.Navigation("Seat");
                 });
 
             modelBuilder.Entity("MovieReservationSystem.Data.Entities.Seat", b =>
@@ -832,11 +858,6 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                     b.Navigation("Actor");
 
                     b.Navigation("Director");
-                });
-
-            modelBuilder.Entity("MovieReservationSystem.Data.Entities.Seat", b =>
-                {
-                    b.Navigation("Reservation");
                 });
 
             modelBuilder.Entity("MovieReservationSystem.Data.Entities.SeatType", b =>

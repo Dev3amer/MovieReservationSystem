@@ -68,6 +68,5 @@ namespace MovieReservationSystem.Core.Features.ShowTimes.Commands.Validator
                 return await _hallService.IsExistAsync(key);
             }).WithMessage(SharedResourcesKeys.Invalid);
         }
-
     }
 }
