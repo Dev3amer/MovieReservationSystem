@@ -25,6 +25,13 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(new GetAllSeatsQuery());
             return NewResult(result);
         }
+        [HttpGet(Router.SeatRouting.FreeSeatsInShowTime)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetFreeSeatsInShowTimeAsync([FromRoute] int showTimeId)
+        {
+            var result = await _mediator.Send(new GetFreeSeatsInShowTimeQuery() { ShowTimeId = showTimeId });
+            return NewResult(result);
+        }
 
         [HttpGet(Router.SeatRouting.GetById)]
         [ProducesResponseType(StatusCodes.Status200OK)]

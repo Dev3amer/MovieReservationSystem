@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MovieReservationSystem.Core.Features.SeatTypes.Commands.Models;
-using MovieReservationSystem.Core.Resources;
+using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.SeatTypes.Commands.Validators

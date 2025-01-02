@@ -3,10 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MovieReservationSystem.Core.Features.Reservations.Commands.Models;
 using MovieReservationSystem.Core.Features.Reservations.Queries.Results;
-using MovieReservationSystem.Core.Resources;
 using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Data.Entities;
 using MovieReservationSystem.Data.Entities.Identity;
+using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Reservations.Commands.Handler

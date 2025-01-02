@@ -1,15 +1,17 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MovieReservationSystem.Core.Features.Seats.Queries.Models;
 using MovieReservationSystem.Core.Features.Seats.Queries.Results;
-using MovieReservationSystem.Core.Resources;
 using MovieReservationSystem.Core.Response;
+using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Seats.Queries.Handler
 {
     public class SeatQueryHandler : ResponseHandler,
         IRequestHandler<GetAllSeatsQuery, Response<List<GetAllSeatsResponse>>>,
+        IRequestHandler<GetFreeSeatsInShowTimeQuery, Response<List<GetFreeSeatsInShowTimeResponse>>>,
         IRequestHandler<GetSeatByIdQuery, Response<GetSeatByIdResponse>>
     {
         #region Fields
@@ -43,6 +45,27 @@ namespace MovieReservationSystem.Core.Features.Seats.Queries.Handler
             var mappedSeat = _mapper.Map<GetSeatByIdResponse>(seat);
 
             return Success(mappedSeat);
+        }
+
+        public async Task<Response<List<GetFreeSeatsInShowTimeResponse>>> Handle(GetFreeSeatsInShowTimeQuery request, CancellationToken cancellationToken)
+        {
+            var hallId = await _seatService.GetAllQueryable()
+            .Where(s => s.Reservations.Any(r => r.ShowTime.ShowTimeId == request.ShowTimeId))
+            .Select(s => s.Hall.HallId)
+            .FirstOrDefaultAsync();
+
+            var freeSeatsList = await _seatService.GetAllQueryable()
+                .Where(s => !s.Reservations.Any(r => r.ShowTime.ShowTimeId == request.ShowTimeId) &&
+                            s.Hall.HallId == hallId)
+                .Select(s => new GetFreeSeatsInShowTimeResponse
+                {
+                    SeatId = s.SeatId,
+                    SeatNumber = s.SeatNumber,
+                    SeatTypeName = s.SeatType.TypeName
+                })
+                .ToListAsync();
+
+            return Success(freeSeatsList);
         }
     }
 }

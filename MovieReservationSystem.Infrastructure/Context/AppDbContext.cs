@@ -21,6 +21,7 @@ namespace MovieReservationSystem.Infrastructure.Context
         public DbSet<Director> Directors { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ReservationSeat> ReservationSeats { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
         #endregion
 
         #region Constructors

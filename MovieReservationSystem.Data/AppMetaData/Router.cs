@@ -63,6 +63,7 @@
             public const string Prefix = Rule + "Seat/";
 
             public const string list = Prefix + "List";
+            public const string FreeSeatsInShowTime = Prefix + "FreeSeats/{showTimeId}";
             public const string GetById = Prefix + SingleRoute;
 
 
@@ -122,7 +123,10 @@
         {
             public const string Prefix = Rule + "Authentication/";
 
+            public const string ValidateToken = Prefix + "ValidateToken";
+
             public const string SignIn = Prefix + "SignIn";
+            public const string RefreshToken = Prefix + "RefreshToken";
         }
         public static class ReservationRouting
         {

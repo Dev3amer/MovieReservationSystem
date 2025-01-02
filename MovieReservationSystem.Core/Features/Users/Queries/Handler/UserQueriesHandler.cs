@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MovieReservationSystem.Core.Features.Users.Queries.Models;
 using MovieReservationSystem.Core.Features.Users.Queries.Results;
-using MovieReservationSystem.Core.Resources;
 using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Data.Entities.Identity;
+using MovieReservationSystem.Data.Resources;
 
 namespace MovieReservationSystem.Core.Features.Users.Queries.Handler
 {

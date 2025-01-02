@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using MovieReservationSystem.Core.Features.Reservations.Commands.Models;
-using MovieReservationSystem.Core.Resources;
 using MovieReservationSystem.Data.Entities.Identity;
+using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Reservations.Commands.Validators

@@ -1,4 +1,4 @@
-﻿using MovieReservationSystem.Core.Resources;
+﻿using MovieReservationSystem.Data.Resources;
 
 namespace MovieReservationSystem.Core.Response
 {
@@ -25,13 +25,13 @@ namespace MovieReservationSystem.Core.Response
                 Meta = Meta
             };
         }
-        public Response<T> Unauthorized<T>()
+        public Response<T> Unauthorized<T>(string Message = null)
         {
             return new Response<T>()
             {
                 StatusCode = System.Net.HttpStatusCode.Unauthorized,
                 Succeeded = true,
-                Message = "UnAuthorized"
+                Message = Message == null ? SharedResourcesKeys.UnAuthorized : Message
             };
         }
         public Response<T> BadRequest<T>(string Message = null)

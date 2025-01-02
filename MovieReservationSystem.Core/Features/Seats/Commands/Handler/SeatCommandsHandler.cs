@@ -2,9 +2,9 @@
 using MediatR;
 using MovieReservationSystem.Core.Features.Seats.Commands.Models;
 using MovieReservationSystem.Core.Features.Seats.Queries.Results;
-using MovieReservationSystem.Core.Resources;
 using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Data.Entities;
+using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Seats.Commands.Handler

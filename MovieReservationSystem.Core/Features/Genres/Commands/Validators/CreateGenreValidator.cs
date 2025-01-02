@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MovieReservationSystem.Core.Features.Genres.Commands.Models;
-using MovieReservationSystem.Core.Resources;
+using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Genres.Commands.Validators

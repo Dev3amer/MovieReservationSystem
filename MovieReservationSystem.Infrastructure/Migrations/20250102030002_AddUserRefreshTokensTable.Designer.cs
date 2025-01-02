@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieReservationSystem.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using MovieReservationSystem.Infrastructure.Context;
 namespace MovieReservationSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250102030002_AddUserRefreshTokensTable")]
+    partial class AddUserRefreshTokensTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -400,9 +403,6 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                     b.Property<string>("JwtId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
@@ -752,7 +752,7 @@ namespace MovieReservationSystem.Infrastructure.Migrations
             modelBuilder.Entity("MovieReservationSystem.Data.Entities.Identity.UserRefreshToken", b =>
                 {
                     b.HasOne("MovieReservationSystem.Data.Entities.Identity.User", "User")
-                        .WithMany("UserRefreshTokens")
+                        .WithMany()
                         .HasForeignKey("userID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -894,11 +894,6 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                     b.Navigation("Seats");
 
                     b.Navigation("ShowTimes");
-                });
-
-            modelBuilder.Entity("MovieReservationSystem.Data.Entities.Identity.User", b =>
-                {
-                    b.Navigation("UserRefreshTokens");
                 });
 
             modelBuilder.Entity("MovieReservationSystem.Data.Entities.Movie", b =>

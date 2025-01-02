@@ -48,7 +48,7 @@ namespace MovieReservationSystem.Service.Implementations
                 .FirstOrDefaultAsync(r => r.ReservationId == id);
         }
 
-        public IQueryable<Reservation> GetAllQueryable(DateOnly? search)
+        public IQueryable<Reservation> GetAllQueryable(DateOnly? search = null)
         {
 
             var queryableList = _reservationRepository.GetTableNoTracking()

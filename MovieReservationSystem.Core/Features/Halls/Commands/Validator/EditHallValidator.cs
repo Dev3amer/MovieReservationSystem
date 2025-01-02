@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MovieReservationSystem.Core.Features.Halls.Commands.Models;
 using MovieReservationSystem.Core.Features.ShowTimes.Commands.Models;
-using MovieReservationSystem.Core.Resources;
+using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Halls.Commands.Validator

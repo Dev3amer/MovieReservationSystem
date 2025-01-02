@@ -4,8 +4,8 @@ using MovieReservationSystem.Core.Features.Reservations.Queries.Models;
 using MovieReservationSystem.Core.Features.Reservations.Queries.Results;
 using MovieReservationSystem.Core.Features.Reservations.Queries.Results.Shared;
 using MovieReservationSystem.Core.Pagination;
-using MovieReservationSystem.Core.Resources;
 using MovieReservationSystem.Core.Response;
+using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Reservations.Queries.Handler

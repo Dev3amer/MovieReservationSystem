@@ -9,5 +9,7 @@
         public bool ValidateAudience { get; set; }
         public bool ValidateLifeTime { get; set; }
         public bool ValidateIssuerSigningKey { get; set; }
+        public int accessTokenExpireDateInMinutes { get; set; }
+        public int refreshTokenExpireDateInDays { get; set; }
     }
 }
