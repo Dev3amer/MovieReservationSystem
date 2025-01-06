@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Actors.Commands.Models;
@@ -9,6 +10,7 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ActorsController : AppController
     {
         #region Constructors

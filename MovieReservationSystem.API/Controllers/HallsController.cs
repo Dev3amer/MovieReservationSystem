@@ -1,15 +1,16 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Halls.Commands.Models;
 using MovieReservationSystem.Core.Features.Halls.Queries.Models;
-using MovieReservationSystem.Core.Features.ShowTimes.Commands.Models;
 using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class HallsController : AppController
     {
         #region Constructors

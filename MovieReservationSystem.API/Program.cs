@@ -9,6 +9,7 @@ using MovieReservationSystem.Data.Entities.Identity;
 using MovieReservationSystem.Data.Helpers;
 using MovieReservationSystem.Infrastructure;
 using MovieReservationSystem.Infrastructure.Context;
+using MovieReservationSystem.Infrastructure.Seeding;
 using MovieReservationSystem.Service;
 using System.Text;
 
@@ -16,7 +17,7 @@ namespace MovieReservationSystem.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -154,7 +155,13 @@ namespace MovieReservationSystem.API
             #endregion
 
             var app = builder.Build();
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                await RolesSeeder.SeedRolesAsync(roleManager);
+                await UserSeeder.SeedUserAsync(userManager);
+            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

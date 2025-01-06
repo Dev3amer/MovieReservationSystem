@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.ShowTimes.Commands.Models;
@@ -9,6 +10,7 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ShowTimesController : AppController
     {
         #region Constructors
@@ -20,12 +22,13 @@ namespace MovieReservationSystem.API.Controllers
         #region Queries Actions
         [HttpGet(Router.ShowTimeRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllShowTimesAsync()
         {
             var result = await _mediator.Send(new GetAllShowTimesQuery());
             return NewResult(result);
         }
-
+        [AllowAnonymous]
         [HttpGet(Router.ShowTimeRouting.GetById)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

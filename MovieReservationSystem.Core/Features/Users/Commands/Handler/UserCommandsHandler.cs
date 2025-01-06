@@ -30,17 +30,17 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
         #region Actions
         public async Task<Response<string>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            //Mapping CreateUserCommand ==> User
             var user = _mapper.Map<User>(request);
 
-            //Save New User
-            var createdUser = await _userManager.CreateAsync(user, request.Password);
+            var identityResult = await _userManager.CreateAsync(user, request.Password);
 
-            //Check if the User not Added
-            if (!createdUser.Succeeded)
-                return BadRequest<string>(createdUser.Errors.FirstOrDefault().Description);
 
-            //return Created Response
+            if (!identityResult.Succeeded)
+                return BadRequest<string>(identityResult.Errors.FirstOrDefault().Description);
+
+            user = await _userManager.FindByNameAsync(user.UserName);
+            await _userManager.AddToRoleAsync(user, "User");
+
             return Created<string>(SharedResourcesKeys.Created);
         }
 

@@ -42,13 +42,13 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Validators
             RuleFor(u => u.Email)
             .NotNull().WithMessage(SharedResourcesKeys.NotNull)
             .NotEmpty().WithMessage(SharedResourcesKeys.NotEmpty)
-            .Matches(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").WithMessage($"{SharedResourcesKeys.InvalidPhone}");
+            .Matches(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$").WithMessage($"{SharedResourcesKeys.InvalidEmail}");
 
 
             RuleFor(u => u.PhoneNumber)
             .NotNull().WithMessage(SharedResourcesKeys.NotNull)
             .NotEmpty().WithMessage(SharedResourcesKeys.NotEmpty)
-            .Matches(@"^(?:\+?20|0020|0)?1[0125]\d{8}$").WithMessage($"{SharedResourcesKeys.InvalidEmail}");
+            .Matches(@"^(?:\+?20|0020|0)?1[0125]\d{8}$").WithMessage($"{SharedResourcesKeys.InvalidPhone}");
 
 
 

@@ -128,6 +128,18 @@
             public const string SignIn = Prefix + "SignIn";
             public const string RefreshToken = Prefix + "RefreshToken";
         }
+        public static class AuthorizationRouting
+        {
+            public const string Prefix = Rule + "Authorization/";
+
+            public const string CreateRole = Prefix + "Role/Create";
+            public const string EditRole = Prefix + "Role/Edit";
+            public const string DeleteRole = Prefix + "Role/" + SingleRoute;
+
+            public const string list = Prefix + "Role/" + "List";
+            public const string GetById = Prefix + "Role/" + SingleRoute;
+
+        }
         public static class ReservationRouting
         {
             public const string Prefix = Rule + "Reservation/";

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Movies.Commands.Models;
 using MovieReservationSystem.Core.Features.Movies.Queries.Models;
-using MovieReservationSystem.Core.Features.Reservations.Commands.Models;
 using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
@@ -29,6 +28,8 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(new GetAllMoviesQuery());
             return NewResult(result);
         }
+
+        [AllowAnonymous]
         [HttpGet(Router.MovieRouting.GetById)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

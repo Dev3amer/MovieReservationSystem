@@ -23,7 +23,7 @@ namespace MovieReservationSystem.Infrastructure.Config
 
             builder.ToTable("Genres");
 
-            builder.HasData(SeedingData.LoadDefaultGenres());
+            builder.HasData(SeedingDataWithMigration.LoadDefaultGenres());
         }
     }
 }

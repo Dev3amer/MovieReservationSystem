@@ -33,5 +33,9 @@
         public const string InvalidRefreshToken = "Invalid Refresh Token";
         public const string ExpiredRefreshToken = "Expired Refresh Token";
         public const string InvalidToken = "Invalid Access Token";
+
+
+
+        public const string DeleteRoleWitUsersException = "Remove or Change Role for Users in This Role First";
     }
 }

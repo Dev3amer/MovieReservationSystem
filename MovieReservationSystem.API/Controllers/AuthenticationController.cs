@@ -28,8 +28,6 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-
-
         [HttpPost(Router.AuthenticationRouting.SignIn)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -23,7 +23,7 @@ namespace MovieReservationSystem.Infrastructure.Config
                 .IsRequired();
 
             builder.ToTable("SeatTypes");
-            builder.HasData(SeedingData.LoadDefaultSeatTypes());
+            builder.HasData(SeedingDataWithMigration.LoadDefaultSeatTypes());
         }
     }
 }

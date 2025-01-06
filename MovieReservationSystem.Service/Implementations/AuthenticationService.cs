@@ -22,7 +22,8 @@ namespace MovieReservationSystem.Service.Implementations
         #endregion
 
         #region Constructors
-        public AuthenticationService(JwtSettings jwtSettings, IRefreshTokenRepository refreshTokenRepository, UserManager<User> userManager)
+        public AuthenticationService(JwtSettings jwtSettings, IRefreshTokenRepository refreshTokenRepository
+            , UserManager<User> userManager)
         {
             _jwtSettings = jwtSettings;
             _refreshTokenRepository = refreshTokenRepository;
@@ -33,7 +34,7 @@ namespace MovieReservationSystem.Service.Implementations
         #region Actions
         public async Task<JwtAuthTokenResponse> GetJwtTokenAsync(User user)
         {
-            var jwtToken = GenerateJwtSecurityToken(user);
+            var jwtToken = await GenerateJwtSecurityTokenAsync(user);
 
             var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
@@ -47,9 +48,10 @@ namespace MovieReservationSystem.Service.Implementations
                 RefreshToken = refreshTokenForResponse
             };
         }
-        private JwtSecurityToken GenerateJwtSecurityToken(User user)
+        private async Task<JwtSecurityToken> GenerateJwtSecurityTokenAsync(User user)
         {
-            var userClaims = GetClaims(user);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var userClaims = GetClaims(user, userRoles.ToList());
 
             var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Secret));
 
@@ -65,15 +67,18 @@ namespace MovieReservationSystem.Service.Implementations
             );
             return jwtToken;
         }
-        private IEnumerable<Claim> GetClaims(User user)
+        private IEnumerable<Claim> GetClaims(User user, List<string> userRoles)
         {
             var claims = new List<Claim>()
             {
-                new Claim("Id",user.Id),
-                new Claim("username",user.UserName),
-                new Claim("Email",user.Email),
-                new Claim("PhoneNumber",user.PhoneNumber)
+                new Claim(ClaimTypes.NameIdentifier,user.Id),
+                new Claim(ClaimTypes.Name,user.UserName),
+                new Claim(ClaimTypes.Email,user.Email),
             };
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
             return claims;
         }
         private async Task<UserRefreshToken> SaveUserRefreshTokenAsync(User user, string accessToken, string jwtTokenId)
@@ -117,7 +122,7 @@ namespace MovieReservationSystem.Service.Implementations
             // Generate JWT Security Token
             var user = await _userManager.FindByIdAsync(userRefreshToken.userID);
 
-            var generatedJwtSecurityToken = GenerateJwtSecurityToken(user);
+            var generatedJwtSecurityToken = await GenerateJwtSecurityTokenAsync(user);
             var NewAccessToken = new JwtSecurityTokenHandler().WriteToken(generatedJwtSecurityToken);
 
             var refreshTokenForResponse = GetRefreshTokenForResponse(userRefreshToken.ExpiryDate, user.UserName, userRefreshToken.RefreshToken);
@@ -147,7 +152,7 @@ namespace MovieReservationSystem.Service.Implementations
                 return SharedResourcesKeys.NotExpiredToken;
 
             //Get User RefreshToken
-            var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == "Id").Value;
+            var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
 
             var userRefreshToken = await _refreshTokenRepository.GetTableAsTracking()
                 .FirstOrDefaultAsync(x => x.Token == accessToken && x.RefreshToken == refreshToken && x.userID == userId);
@@ -199,6 +204,5 @@ namespace MovieReservationSystem.Service.Implementations
                 .FirstOrDefaultAsync();
         }
         #endregion
-
     }
 }

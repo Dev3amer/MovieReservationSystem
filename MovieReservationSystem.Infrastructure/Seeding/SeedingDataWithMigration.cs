@@ -2,7 +2,7 @@
 
 namespace MovieReservationSystem.Infrastructure.Seeding
 {
-    public static class SeedingData
+    public static class SeedingDataWithMigration
     {
         public static List<Genre> LoadDefaultGenres()
         {

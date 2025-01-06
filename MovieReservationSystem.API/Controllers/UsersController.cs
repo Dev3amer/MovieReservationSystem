@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Users.Commands.Models;
@@ -9,6 +10,7 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
+
     public class UsersController : AppController
     {
         #region Constructors
@@ -18,6 +20,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+        [Authorize(Roles = "Admin")]
         [HttpGet(Router.UserRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllUsersAsync()
@@ -26,6 +29,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet(Router.UserRouting.GetById)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -41,12 +45,13 @@ namespace MovieReservationSystem.API.Controllers
         [HttpPost(Router.UserRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddUser([FromBody] CreateUserCommand model)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
 
+        [Authorize]
         [HttpPut(Router.UserRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -55,7 +60,7 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
-
+        [Authorize]
         [HttpPut(Router.UserRouting.ChangePassword)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -64,11 +69,11 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete(Router.UserRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteActor(string id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
             var result = await _mediator.Send(new DeleteUserCommand() { Id = id });
             return NewResult(result);
