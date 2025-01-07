@@ -42,7 +42,6 @@ namespace MovieReservationSystem.Core.Features.Users.Queries.Handler
 
         public async Task<Response<GetUserByIdResponse>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            //var user = await _userManager.FindByIdAsync(request.Id);
 
             var userMappedIntoResponse = await _userManager.Users.Where(u => u.Id == request.Id)
             .Select(u => new GetUserByIdResponse
@@ -55,8 +54,6 @@ namespace MovieReservationSystem.Core.Features.Users.Queries.Handler
 
             if (userMappedIntoResponse is null)
                 return NotFound<GetUserByIdResponse>(SharedResourcesKeys.NotFound);
-
-            //var mappedUser = _mapper.Map<GetUserByIdResponse>(user);
 
             return Success(userMappedIntoResponse);
         }

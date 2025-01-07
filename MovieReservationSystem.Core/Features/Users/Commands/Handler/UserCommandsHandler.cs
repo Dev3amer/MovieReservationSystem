@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using MovieReservationSystem.Core.Features.Users.Commands.Models;
+using MovieReservationSystem.Core.Features.Users.Queries.Results;
 using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Data.Entities.Identity;
 using MovieReservationSystem.Data.Resources;
@@ -9,8 +10,8 @@ using MovieReservationSystem.Data.Resources;
 namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
 {
     public class UserCommandsHandler : ResponseHandler,
-        IRequestHandler<CreateUserCommand, Response<string>>,
-        IRequestHandler<EditUserCommand, Response<string>>,
+        IRequestHandler<CreateUserCommand, Response<GetUserByIdResponse>>,
+        IRequestHandler<EditUserCommand, Response<GetUserByIdResponse>>,
         IRequestHandler<DeleteUserCommand, Response<bool>>,
         IRequestHandler<ChangePasswordCommand, Response<bool>>
     {
@@ -28,7 +29,7 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
         #endregion
 
         #region Actions
-        public async Task<Response<string>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Response<GetUserByIdResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var user = _mapper.Map<User>(request);
 
@@ -36,24 +37,39 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
 
 
             if (!identityResult.Succeeded)
-                return BadRequest<string>(identityResult.Errors.FirstOrDefault().Description);
+                return BadRequest<GetUserByIdResponse>(identityResult.Errors.FirstOrDefault().Description);
 
             user = await _userManager.FindByNameAsync(user.UserName);
             await _userManager.AddToRoleAsync(user, "User");
 
-            return Created<string>(SharedResourcesKeys.Created);
+            var userMappedIntoResponse = new GetUserByIdResponse
+            {
+                FullName = user.FirstName + " " + user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName
+            };
+
+            return Created(userMappedIntoResponse);
         }
 
-        public async Task<Response<string>> Handle(EditUserCommand request, CancellationToken cancellationToken)
+        public async Task<Response<GetUserByIdResponse>> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
             var oldUser = await _userManager.FindByIdAsync(request.Id);
             var user = _mapper.Map(request, oldUser);
 
             var updatedUser = await _userManager.UpdateAsync(user);
             if (!updatedUser.Succeeded)
-                return BadRequest<string>(updatedUser.Errors.FirstOrDefault().Description);
+                return BadRequest<GetUserByIdResponse>(updatedUser.Errors.FirstOrDefault().Description);
 
-            return Success<string>(SharedResourcesKeys.Success);
+            var userMappedIntoResponse = new GetUserByIdResponse
+            {
+                FullName = user.FirstName + " " + user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                UserName = user.UserName
+            };
+            return Success(userMappedIntoResponse);
         }
 
         public async Task<Response<bool>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
