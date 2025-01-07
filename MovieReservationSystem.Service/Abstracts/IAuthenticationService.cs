@@ -11,6 +11,6 @@ namespace MovieReservationSystem.Service.Abstracts
         Task<string>? ValidateBeforeRenewTokenAsync(JwtSecurityToken jwtToken, string accessToken, string refreshToken);
         Task<JwtAuthTokenResponse> CreateNewAccessTokenByRefreshToken(string accessToken, UserRefreshToken userRefreshToken);
         Task<string>? ValidateAccessTokenAsync(string accessToken);
-        Task<UserRefreshToken> GetUserRefreshTokenByRefreshToken(string refreshToken);
+        Task<UserRefreshToken> GetUserFullRefreshTokenObjByRefreshToken(string refreshToken);
     }
 }

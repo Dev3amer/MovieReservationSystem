@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieReservationSystem.Data.Entities.Identity;
 using MovieReservationSystem.Data.Resources;
+using MovieReservationSystem.Infrastructure.Context;
 using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Service.Implementations
@@ -11,12 +12,14 @@ namespace MovieReservationSystem.Service.Implementations
         #region Fields
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly AppDbContext _context;
         #endregion
         #region Constructor
-        public AuthorizationService(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+        public AuthorizationService(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, AppDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _context = context;
         }
         #endregion
         #region Functions
@@ -70,6 +73,46 @@ namespace MovieReservationSystem.Service.Implementations
             return await _roleManager.Roles
                 .Select(r => new IdentityRole { Id = r.Id, Name = r.Name })
                 .FirstOrDefaultAsync(r => r.Id == id);
+        }
+
+        public async Task<List<string>> GetUserRolesAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new Exception(SharedResourcesKeys.NotFound);
+
+            var userRolesNames = await _userManager.GetRolesAsync(user);
+            return userRolesNames.ToList();
+            //var userRolesList = new List<IdentityRole>();
+            //foreach (var roleName in userRolesInStringFormat)
+            //{
+            //    userRolesList.Add(await _roleManager.FindByNameAsync(roleName));
+            //}
+            //return userRolesList;
+        }
+
+        public async Task<List<string>> UpdateUserRolesAsync(string userId, List<string> rolesNames)
+        {
+            var user = await _userManager.FindByIdAsync(userId) ?? throw new KeyNotFoundException(SharedResourcesKeys.NotFound);
+            var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var oldUserRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, oldUserRoles);
+
+                var identityResult = await _userManager.AddToRolesAsync(user, rolesNames);
+
+                if (!identityResult.Succeeded)
+                    throw new Exception(identityResult.Errors.FirstOrDefault().Description);
+
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                throw ex;
+            }
+            return await GetUserRolesAsync(userId);
         }
         #endregion
     }

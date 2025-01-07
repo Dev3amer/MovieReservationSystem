@@ -10,7 +10,6 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class GenresController : AppController
     {
         #region Constructors
@@ -39,16 +38,16 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-
+        [Authorize(Roles = "Data Entry")]
         [HttpPost(Router.GenreRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddGenre([FromBody] CreateGenreCommand model)
+        public async Task<IActionResult> CreateGenre([FromBody] CreateGenreCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
-
+        [Authorize(Roles = "Data Entry")]
         [HttpPut(Router.GenreRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -58,6 +57,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Data Entry")]
         [HttpDelete(Router.GenreRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

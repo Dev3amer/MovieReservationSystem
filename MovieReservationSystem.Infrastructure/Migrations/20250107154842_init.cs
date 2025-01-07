@@ -219,6 +219,32 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserRefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    userID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    JwtId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRefreshTokens_AspNetUsers_userID",
+                        column: x => x.userID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Actors",
                 columns: table => new
                 {
@@ -573,6 +599,11 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 name: "IX_ShowTimes_MovieId",
                 table: "ShowTimes",
                 column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRefreshTokens_userID",
+                table: "UserRefreshTokens",
+                column: "userID");
         }
 
         /// <inheritdoc />
@@ -601,6 +632,9 @@ namespace MovieReservationSystem.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ReservationSeats");
+
+            migrationBuilder.DropTable(
+                name: "UserRefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

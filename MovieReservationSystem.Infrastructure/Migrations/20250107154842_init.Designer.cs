@@ -12,8 +12,8 @@ using MovieReservationSystem.Infrastructure.Context;
 namespace MovieReservationSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250102031149_ModifyRefreshTokensTable")]
-    partial class ModifyRefreshTokensTable
+    [Migration("20250107154842_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

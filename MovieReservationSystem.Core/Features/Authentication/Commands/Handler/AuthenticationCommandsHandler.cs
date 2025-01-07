@@ -61,7 +61,7 @@ namespace MovieReservationSystem.Core.Features.Authentication.Commands.Handler
                 return Unauthorized<JwtAuthTokenResponse>(validationResult);
 
 
-            var userRefreshToken = await _authenticationService.GetUserRefreshTokenByRefreshToken(request.RefreshToken);
+            var userRefreshToken = await _authenticationService.GetUserFullRefreshTokenObjByRefreshToken(request.RefreshToken);
             var result = await _authenticationService.CreateNewAccessTokenByRefreshToken(request.AccessToken, userRefreshToken);
             return Success(result);
         }

@@ -10,7 +10,7 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+
     public class ReservationsController : AppController
     {
         #region Constructors
@@ -20,6 +20,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+        [Authorize(Roles = "Reservations Manager")]
         [HttpGet(Router.ReservationRouting.PaginatedList)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetReservationsPaginatedList([FromQuery] GetReservationsPaginatedListQuery model)
@@ -27,7 +28,7 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return Ok(result);
         }
-
+        [Authorize(Roles = "Reservations Manager,User")]
         [HttpGet(Router.ReservationRouting.GetById)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -39,16 +40,16 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-
+        [Authorize(Roles = "Reservations Manager,User")]
         [HttpPost(Router.ReservationRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddSeat([FromBody] CreateReservationCommand model)
+        public async Task<IActionResult> CreateReservation([FromBody] CreateReservationCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
-
+        [Authorize(Roles = "Reservations Manager")]
         [HttpDelete(Router.ReservationRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

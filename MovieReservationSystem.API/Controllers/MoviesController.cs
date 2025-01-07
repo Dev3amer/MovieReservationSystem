@@ -10,7 +10,7 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Data Entry")]
     public class MoviesController : AppController
     {
         #region Constructors

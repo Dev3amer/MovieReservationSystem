@@ -138,6 +138,8 @@
 
             public const string list = Prefix + "Role/" + "List";
             public const string GetById = Prefix + "Role/" + SingleRoute;
+            public const string GetUserRoles = Prefix + "Role/User-Roles" + SingleRoute;
+            public const string EditUserRoles = Prefix + "Role/Edit-User-Roles";
 
         }
         public static class ReservationRouting

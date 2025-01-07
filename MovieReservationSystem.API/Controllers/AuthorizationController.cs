@@ -18,6 +18,7 @@ namespace MovieReservationSystem.API.Controllers
         {
         }
         #endregion
+
         #region Queries Actions
         [HttpGet(Router.AuthorizationRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -30,9 +31,18 @@ namespace MovieReservationSystem.API.Controllers
         [HttpGet(Router.AuthorizationRouting.GetById)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetActorByIdAsync(string id)
+        public async Task<IActionResult> GetRoleByIdAsync(string id)
         {
             var result = await _mediator.Send(new GetRoleByIdQuery() { Id = id });
+            return NewResult(result);
+        }
+
+        [HttpGet(Router.AuthorizationRouting.GetUserRoles)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetUserRolesByUserIdAsync(string id)
+        {
+            var result = await _mediator.Send(new GetUserRolesQuery() { userId = id });
             return NewResult(result);
         }
         #endregion
@@ -46,7 +56,8 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
-        [HttpPost(Router.AuthorizationRouting.EditRole)]
+
+        [HttpPut(Router.AuthorizationRouting.EditRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> EditRole([FromForm] EditRoleCommand model)
@@ -54,6 +65,17 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
+
+        [HttpPut(Router.AuthorizationRouting.EditUserRoles)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> EditUserRoles([FromForm] UpdateUserRolesCommand model)
+        {
+            var result = await _mediator.Send(model);
+            return NewResult(result);
+        }
+
         [HttpDelete(Router.AuthorizationRouting.DeleteRole)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

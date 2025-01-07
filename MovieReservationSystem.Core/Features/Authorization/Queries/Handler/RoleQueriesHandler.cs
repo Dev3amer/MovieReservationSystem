@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MovieReservationSystem.Core.Features.Authorization.Queries.Models;
 using MovieReservationSystem.Core.Features.Authorization.Queries.Results;
 using MovieReservationSystem.Core.Response;
@@ -10,7 +11,8 @@ namespace MovieReservationSystem.Core.Features.Authorization.Queries.Handler
 {
     public class RoleQueriesHandler : ResponseHandler,
         IRequestHandler<GetAllRolesQuery, Response<List<GetAllRolesResponse>>>,
-        IRequestHandler<GetRoleByIdQuery, Response<GetRoleByIdResponse>>
+        IRequestHandler<GetRoleByIdQuery, Response<GetRoleByIdResponse>>,
+        IRequestHandler<GetUserRolesQuery, Response<GetUserRolesResponse>>
     {
         #region Fields
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -45,6 +47,35 @@ namespace MovieReservationSystem.Core.Features.Authorization.Queries.Handler
 
             var mappedRole = new GetRoleByIdResponse() { Id = role.Id, Name = role.Name };
             return Success(mappedRole);
+        }
+
+        public async Task<Response<GetUserRolesResponse>> Handle(GetUserRolesQuery request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                //Get User Roles
+                var userRolesList = await _authorizationService.GetUserRolesAsync(request.userId);
+
+                //Get All Roles
+                var allRoles = await _roleManager.Roles.ToListAsync();
+
+                //Map Response From AllRoles and User Roles
+                var Response = new GetUserRolesResponse()
+                {
+                    UserId = request.userId,
+                    Roles = allRoles.Select(r => new RolesInUserRolesResponse
+                    {
+                        RoleId = r.Id,
+                        Name = r.Name,
+                        HasRole = userRolesList.Contains(r.Name)
+                    }).ToList()
+                };
+                return Success(Response);
+            }
+            catch (Exception ex)
+            {
+                return NotFound<GetUserRolesResponse>(ex.Message);
+            }
         }
         #endregion
     }

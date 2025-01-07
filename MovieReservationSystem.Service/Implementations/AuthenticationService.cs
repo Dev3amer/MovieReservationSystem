@@ -196,9 +196,8 @@ namespace MovieReservationSystem.Service.Implementations
                 return ex.Message;
             }
         }
-        public async Task<UserRefreshToken> GetUserRefreshTokenByRefreshToken(string refreshToken)
+        public async Task<UserRefreshToken> GetUserFullRefreshTokenObjByRefreshToken(string refreshToken)
         {
-
             return await _refreshTokenRepository.GetTableNoTracking()
                 .Where(r => r.RefreshToken == refreshToken)
                 .FirstOrDefaultAsync();

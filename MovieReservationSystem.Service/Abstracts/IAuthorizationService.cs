@@ -10,5 +10,7 @@ namespace MovieReservationSystem.Service.Abstracts
         Task<IdentityResult> DeleteRoleAsync(string Id);
         Task<IEnumerable<IdentityRole>> GetAllRolesAsync();
         Task<IdentityRole> GetRoleByIdAsync(string id);
+        Task<List<string>> GetUserRolesAsync(string userId);
+        Task<List<string>> UpdateUserRolesAsync(string userId, List<string> rolesNames);
     }
 }

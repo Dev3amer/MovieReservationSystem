@@ -20,6 +20,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+        [Authorize(Roles = "Data Entry")]
         [HttpGet(Router.DirectorRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllDirectorsAsync()
@@ -39,16 +40,17 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-
+        [Authorize(Roles = "Data Entry")]
         [HttpPost(Router.DirectorRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddDirector([FromBody] CreateDirectorCommand model)
+        public async Task<IActionResult> CreateDirector([FromBody] CreateDirectorCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Data Entry")]
         [HttpPut(Router.DirectorRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -58,6 +60,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Data Entry")]
         [HttpDelete(Router.DirectorRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

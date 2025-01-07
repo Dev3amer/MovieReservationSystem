@@ -20,6 +20,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+
         [HttpGet(Router.SeatRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSeatsAsync()
@@ -27,6 +28,7 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(new GetAllSeatsQuery());
             return NewResult(result);
         }
+
         [HttpGet(Router.SeatRouting.FreeSeatsInShowTime)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetFreeSeatsInShowTimeAsync([FromRoute] int showTimeId)
@@ -46,16 +48,17 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-
+        [Authorize(Roles = "Cinema Manager")]
         [HttpPost(Router.SeatRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddSeat([FromBody] CreateSeatCommand model)
+        public async Task<IActionResult> CreateSeat([FromBody] CreateSeatCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Cinema Manager")]
         [HttpDelete(Router.SeatRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

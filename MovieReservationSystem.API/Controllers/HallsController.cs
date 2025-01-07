@@ -9,8 +9,9 @@ using MovieReservationSystem.Data.AppMetaData;
 namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
+
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Cinema Manager")]
     public class HallsController : AppController
     {
         #region Constructors
@@ -20,6 +21,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+
         [HttpGet(Router.HallRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllHallsAsync()
@@ -28,6 +30,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [AllowAnonymous]
         [HttpGet(Router.HallRouting.GetById)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -43,11 +46,12 @@ namespace MovieReservationSystem.API.Controllers
         [HttpPost(Router.HallRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddHall([FromBody] CreateHallCommand model)
+        public async Task<IActionResult> CreateHall([FromBody] CreateHallCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
+
 
         [HttpPut(Router.HallRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -57,6 +61,7 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
+
 
         [HttpDelete(Router.HallRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]

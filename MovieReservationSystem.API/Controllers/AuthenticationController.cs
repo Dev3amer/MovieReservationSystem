@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Authentication.Commands.Models;
@@ -17,6 +18,7 @@ namespace MovieReservationSystem.API.Controllers
         }
         #endregion
         #region Queries Actions
+        [Authorize]
         [HttpPost(Router.AuthenticationRouting.ValidateToken)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -36,6 +38,7 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
+
         [HttpPost(Router.AuthenticationRouting.RefreshToken)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

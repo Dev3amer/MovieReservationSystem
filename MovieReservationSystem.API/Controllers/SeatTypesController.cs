@@ -10,7 +10,6 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class SeatTypesController : AppController
     {
         #region Constructors
@@ -20,6 +19,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+        [Authorize(Roles = "Cinema Manager")]
         [HttpGet(Router.SeatTypeRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllSeatTypesAsync()
@@ -39,7 +39,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-
+        [Authorize(Roles = "Cinema Manager")]
         [HttpPost(Router.SeatTypeRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,6 +49,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Cinema Manager")]
         [HttpPut(Router.SeatTypeRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -58,6 +59,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Cinema Manager")]
         [HttpDelete(Router.SeatTypeRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

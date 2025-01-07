@@ -47,7 +47,6 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
         public async Task<Response<string>> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
             var oldUser = await _userManager.FindByIdAsync(request.Id);
-
             var user = _mapper.Map(request, oldUser);
 
             var updatedUser = await _userManager.UpdateAsync(user);

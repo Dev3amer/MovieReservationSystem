@@ -69,6 +69,12 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Validators
                 var user = await _userManager.FindByEmailAsync(key);
                 return !(user is not null && model.Id != user.Id);
             }).WithMessage(SharedResourcesKeys.Exist);
+
+            RuleFor(u => u.Password).MustAsync(async (model, key, CancellationToken) =>
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                return await _userManager.CheckPasswordAsync(user, key);
+            }).WithMessage(SharedResourcesKeys.IncorrectPassword);
         }
     }
 }
