@@ -10,13 +10,15 @@ namespace MovieReservationSystem.Core.Features.Authentication.Queries.Handler
     {
         #region Fields
         private readonly IAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
 
         #endregion
 
         #region Constructors
-        public AuthenticationQueriesHandler(IAuthenticationService authenticationService)
+        public AuthenticationQueriesHandler(IAuthenticationService authenticationService, IUserService userService)
         {
             _authenticationService = authenticationService;
+            _userService = userService;
         }
         #endregion
 
@@ -27,5 +29,6 @@ namespace MovieReservationSystem.Core.Features.Authentication.Queries.Handler
                 return Unauthorized<string>(result);
             return Success("Valid Token");
         }
+
     }
 }

@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MovieReservationSystem.Core;
+using MovieReservationSystem.Core.Filters;
 using MovieReservationSystem.Core.Middleware;
 using MovieReservationSystem.Data.Entities.Identity;
 using MovieReservationSystem.Data.Helpers;
@@ -76,15 +80,14 @@ namespace MovieReservationSystem.API
             //});
             #endregion
 
-            #region DI
-            //DbContext
+            #region DbContext
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            #endregion
 
-
-            //Identity
+            #region Identity
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
                 //Password Settings
@@ -104,15 +107,19 @@ namespace MovieReservationSystem.API
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
             }).AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+            #endregion
 
-            //Modules Interfaces
+            #region Modules Interfaces
+
             builder.Services.AddModuleInfrastructureDependencies();
             builder.Services.AddModuleServicesDependencies();
             builder.Services.AddModuleCoreDependencies();
+            #endregion
 
-            //Authentication
+            #region Authentication
             var jwtSettings = new JwtSettings();
             builder.Configuration.GetSection(nameof(jwtSettings)).Bind(jwtSettings);
             builder.Services.AddSingleton(jwtSettings);
@@ -139,6 +146,22 @@ namespace MovieReservationSystem.API
            });
             #endregion
 
+            #region Emails Settings
+            var smtpSettings = new SmtpSettings();
+            builder.Configuration.GetSection("SMTP").Bind(smtpSettings);
+            builder.Services.AddSingleton(smtpSettings);
+            #endregion
+
+            #region UrlHelper
+            builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            builder.Services.AddTransient<IUrlHelper>(x =>
+            {
+                var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+                var factory = x.GetRequiredService<IUrlHelperFactory>();
+                return factory.GetUrlHelper(actionContext);
+            });
+            #endregion
+
             #region CORS
             var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -154,7 +177,14 @@ namespace MovieReservationSystem.API
             });
             #endregion
 
+            #region Filters
+            builder.Services.AddTransient<DataEntryRoleFilter>();
+            builder.Services.AddTransient<ReservationManagerRoleFilter>();
+            #endregion
+
             var app = builder.Build();
+
+            #region Seeders
             using (var scope = app.Services.CreateScope())
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
@@ -162,12 +192,15 @@ namespace MovieReservationSystem.API
                 await RolesSeeder.SeedRolesAsync(roleManager);
                 await UserSeeder.SeedUserAsync(userManager);
             }
+            #endregion
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
             app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseHttpsRedirection();
 

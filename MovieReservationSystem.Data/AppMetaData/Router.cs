@@ -118,6 +118,11 @@
             public const string Edit = Prefix + "Edit";
             public const string ChangePassword = Prefix + "ChangePassword";
             public const string Delete = Prefix + SingleRoute;
+            public const string ConfirmEmail = "Api/V1/User/ConfirmEmail";
+            public const string RequestPasswordReset = Prefix + "RequestPasswordReset";
+            public const string ValidatePasswordResetCode = Prefix + "ValidatePasswordResetCode";
+            public const string ResetPassword = Prefix + "ResetPassword";
+
         }
         public static class AuthenticationRouting
         {
@@ -126,6 +131,7 @@
             public const string ValidateToken = Prefix + "ValidateToken";
 
             public const string SignIn = Prefix + "SignIn";
+
             public const string RefreshToken = Prefix + "RefreshToken";
         }
         public static class AuthorizationRouting
@@ -154,6 +160,13 @@
             public const string Create = Prefix + "Create";
             public const string Edit = Prefix + "Edit";
             public const string Delete = Prefix + SingleRoute;
+        }
+        public static class EmailsRouting
+        {
+            public const string Prefix = Rule + "Email/";
+
+            public const string Send = Prefix + "Send";
+
         }
     }
 }

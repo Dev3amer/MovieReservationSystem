@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.ShowTimes.Commands.Models;
 using MovieReservationSystem.Core.Features.ShowTimes.Queries.Models;
+using MovieReservationSystem.Core.Filters;
 using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
@@ -38,7 +38,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-        [Authorize(Roles = "Data Entry")]
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPost(Router.ShowTimeRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -48,7 +48,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
-        [Authorize(Roles = "Data Entry")]
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPut(Router.ShowTimeRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -58,7 +58,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
-        [Authorize(Roles = "Data Entry")]
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpDelete(Router.ShowTimeRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -6,6 +6,7 @@ namespace MovieReservationSystem.Data.Entities.Identity
     {
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;
+        public string? Code { get; set; }
         public virtual ICollection<UserRefreshToken> UserRefreshTokens { get; set; } = new HashSet<UserRefreshToken>();
         public User()
         {

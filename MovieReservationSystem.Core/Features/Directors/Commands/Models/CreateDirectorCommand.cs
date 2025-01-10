@@ -11,14 +11,5 @@ namespace MovieReservationSystem.Core.Features.Directors.Commands.Models
         public string? ImageURL { get; set; }
         public DateOnly BirthDate { get; set; }
         public string Bio { get; set; } = default!;
-
-        public CreateDirectorCommand(string firstName, string lastName, string? imageURL, DateOnly birthDate, string bio)
-        {
-            FirstName = firstName.Trim();
-            LastName = lastName.Trim();
-            ImageURL = imageURL;
-            BirthDate = birthDate;
-            Bio = bio;
-        }
     }
 }

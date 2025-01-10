@@ -7,23 +7,27 @@ using MovieReservationSystem.Core.Features.Users.Queries.Results;
 using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Data.Entities.Identity;
 using MovieReservationSystem.Data.Resources;
+using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Users.Queries.Handler
 {
     public class UserQueryHandler : ResponseHandler,
        IRequestHandler<GetAllUsersQuery, Response<List<GetAllUsersResponse>>>,
-       IRequestHandler<GetUserByIdQuery, Response<GetUserByIdResponse>>
+       IRequestHandler<GetUserByIdQuery, Response<GetUserByIdResponse>>,
+        IRequestHandler<ConfirmEmailQuery, Response<string>>
     {
         #region Fields
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
         #endregion
 
         #region Constructors
-        public UserQueryHandler(IMapper mapper, UserManager<User> userManager)
+        public UserQueryHandler(IMapper mapper, UserManager<User> userManager, IUserService userService)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _userService = userService;
         }
         #endregion
         public async Task<Response<List<GetAllUsersResponse>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
@@ -56,6 +60,20 @@ namespace MovieReservationSystem.Core.Features.Users.Queries.Handler
                 return NotFound<GetUserByIdResponse>(SharedResourcesKeys.NotFound);
 
             return Success(userMappedIntoResponse);
+        }
+
+        public async Task<Response<string>> Handle(ConfirmEmailQuery request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _userService.ConfirmUserEmail(await _userManager.FindByIdAsync(request.UserId), request.Code);
+                return Success(SharedResourcesKeys.EmailConfirmed);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<string>(ex.Message);
+            }
         }
     }
 }

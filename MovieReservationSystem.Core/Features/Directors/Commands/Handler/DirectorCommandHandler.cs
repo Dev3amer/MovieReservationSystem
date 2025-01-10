@@ -27,16 +27,24 @@ namespace MovieReservationSystem.Core.Features.Directors.Commands.Handler
         #endregion
         public async Task<Response<GetDirectorByIdResponse>> Handle(CreateDirectorCommand request, CancellationToken cancellationToken)
         {
+            request.FirstName = request.FirstName.Trim();
+            request.LastName = request.LastName.Trim();
+
             var director = _mapper.Map<Director>(request);
             var savedDirector = await _directorService.AddAsync(director);
+
             var response = _mapper.Map<GetDirectorByIdResponse>(savedDirector);
             return Success(response);
         }
         public async Task<Response<GetDirectorByIdResponse>> Handle(EditDirectorCommand request, CancellationToken cancellationToken)
         {
+            request.FirstName = request.FirstName.Trim();
+            request.LastName = request.LastName.Trim();
+
             var oldDirector = await _directorService.GetByIdAsync(request.DirectorId);
             var mappedDirector = _mapper.Map(request, oldDirector);
             var savedDirector = await _directorService.EditAsync(mappedDirector);
+
             var response = _mapper.Map<GetDirectorByIdResponse>(savedDirector);
             return Success(response);
         }

@@ -37,5 +37,15 @@
 
 
         public const string DeleteRoleWitUsersException = "Remove or Change Role for Users in This Role First";
+
+
+
+        public const string EmailSent = "Email Sent Successfully";
+        public const string EmailNotConfirmed = "Email is Not Confirmed, Check your Email";
+        public const string EmailConfirmed = "Email Confirmed Successfully";
+        public const string EmailAlreadyConfirmed = "Email Already Confirmed";
+        public const string EmailNotFound = "Email Not Found";
+        public const string TryAgain = "Please Try Again";
+        public const string IncorrectCode = "Incorrect Code";
     }
 }

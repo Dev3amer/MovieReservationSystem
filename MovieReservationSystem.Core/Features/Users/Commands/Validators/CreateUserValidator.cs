@@ -70,4 +70,5 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Validators
             }).WithMessage(SharedResourcesKeys.Exist);
         }
     }
+
 }

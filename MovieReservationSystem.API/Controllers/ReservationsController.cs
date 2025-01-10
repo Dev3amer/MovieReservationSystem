@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Reservations.Commands.Models;
 using MovieReservationSystem.Core.Features.Reservations.Queries.Models;
+using MovieReservationSystem.Core.Filters;
 using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
@@ -20,7 +21,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
-        [Authorize(Roles = "Reservations Manager")]
+        [ServiceFilter(typeof(ReservationManagerRoleFilter))]
         [HttpGet(Router.ReservationRouting.PaginatedList)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetReservationsPaginatedList([FromQuery] GetReservationsPaginatedListQuery model)
@@ -49,7 +50,8 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
-        [Authorize(Roles = "Reservations Manager")]
+
+        [ServiceFilter(typeof(ReservationManagerRoleFilter))]
         [HttpDelete(Router.ReservationRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

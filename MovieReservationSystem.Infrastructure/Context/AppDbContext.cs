@@ -8,6 +8,7 @@ namespace MovieReservationSystem.Infrastructure.Context
 {
     public class AppDbContext : IdentityDbContext<User>
     {
+
         #region DbSets
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -23,9 +24,8 @@ namespace MovieReservationSystem.Infrastructure.Context
         public DbSet<ReservationSeat> ReservationSeats { get; set; }
         public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
         #endregion
-
         #region Constructors
-        public AppDbContext(DbContextOptions options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
         #endregion

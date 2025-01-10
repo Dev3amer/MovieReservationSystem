@@ -6,6 +6,7 @@ using MovieReservationSystem.Core.Features.Users.Queries.Results;
 using MovieReservationSystem.Core.Response;
 using MovieReservationSystem.Data.Entities.Identity;
 using MovieReservationSystem.Data.Resources;
+using MovieReservationSystem.Service.Abstracts;
 
 namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
 {
@@ -13,18 +14,23 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
         IRequestHandler<CreateUserCommand, Response<GetUserByIdResponse>>,
         IRequestHandler<EditUserCommand, Response<GetUserByIdResponse>>,
         IRequestHandler<DeleteUserCommand, Response<bool>>,
-        IRequestHandler<ChangePasswordCommand, Response<bool>>
+        IRequestHandler<ChangePasswordCommand, Response<bool>>,
+        IRequestHandler<ValidatePasswordResetCodeCommand, Response<bool>>,
+        IRequestHandler<RequestPasswordResetCommand, Response<bool>>,
+        IRequestHandler<ResetPasswordCommand, Response<bool>>
     {
         #region Fields
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
+        private readonly IUserService _userService;
         #endregion
 
         #region Constructors
-        public UserCommandsHandler(UserManager<User> userManager, IMapper mapper)
+        public UserCommandsHandler(UserManager<User> userManager, IMapper mapper, IUserService userService)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _userService = userService;
         }
         #endregion
 
@@ -32,15 +38,14 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
         public async Task<Response<GetUserByIdResponse>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var user = _mapper.Map<User>(request);
-
-            var identityResult = await _userManager.CreateAsync(user, request.Password);
-
-
-            if (!identityResult.Succeeded)
-                return BadRequest<GetUserByIdResponse>(identityResult.Errors.FirstOrDefault().Description);
-
-            user = await _userManager.FindByNameAsync(user.UserName);
-            await _userManager.AddToRoleAsync(user, "User");
+            try
+            {
+                user = await _userService.CreateUser(user, request.Password);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<GetUserByIdResponse>(ex.Message);
+            }
 
             var userMappedIntoResponse = new GetUserByIdResponse
             {
@@ -95,6 +100,44 @@ namespace MovieReservationSystem.Core.Features.Users.Commands.Handler
                 return BadRequest<bool>(isPasswordChanged.Errors.FirstOrDefault().Description);
 
             return Success<bool>(true);
+        }
+        public async Task<Response<bool>> Handle(RequestPasswordResetCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var result = await _userService.SendResetUserPasswordCode(request.Email);
+
+                return result ? Success(result) : BadRequest<bool>(SharedResourcesKeys.TryAgain);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<bool>(ex.Message);
+            }
+        }
+        public async Task<Response<bool>> Handle(ValidatePasswordResetCodeCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (await _userService.ValidatePasswordResetCode(request.Email, request.ResetCode))
+                    return Success(true);
+                return BadRequest<bool>(SharedResourcesKeys.IncorrectCode);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<bool>(ex.Message);
+            }
+        }
+        public async Task<Response<bool>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _userService.ResetUserPassword(request.ResetCode, request.Password);
+                return Success(true);
+            }
+            catch (Exception)
+            {
+                return BadRequest<bool>(SharedResourcesKeys.TryAgain);
+            }
         }
         #endregion
     }

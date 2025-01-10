@@ -60,6 +60,7 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
+
         [Authorize]
         [HttpPut(Router.UserRouting.ChangePassword)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -69,6 +70,7 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpDelete(Router.UserRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -76,6 +78,42 @@ namespace MovieReservationSystem.API.Controllers
         public async Task<IActionResult> DeleteUser(string id)
         {
             var result = await _mediator.Send(new DeleteUserCommand() { Id = id });
+            return NewResult(result);
+        }
+
+        [HttpGet(Router.UserRouting.ConfirmEmail)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            var result = await _mediator.Send(new ConfirmEmailQuery() { UserId = userId, Code = code });
+            return NewResult(result);
+        }
+
+        [HttpPost(Router.UserRouting.RequestPasswordReset)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> RequestPasswordReset([FromForm] RequestPasswordResetCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return NewResult(result);
+        }
+
+        [HttpPost(Router.UserRouting.ValidatePasswordResetCode)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ValidateResetCode([FromForm] ValidatePasswordResetCodeCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return NewResult(result);
+        }
+
+        [HttpPost(Router.UserRouting.ResetPassword)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordCommand command)
+        {
+            var result = await _mediator.Send(command);
             return NewResult(result);
         }
         #endregion

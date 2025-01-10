@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Genres.Commands.Models;
 using MovieReservationSystem.Core.Features.Genres.Queries.Models;
+using MovieReservationSystem.Core.Filters;
 using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
@@ -19,6 +20,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+        [Authorize(Roles = "Data Entry")]
         [HttpGet(Router.GenreRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllGenresAsync()
@@ -38,7 +40,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-        [Authorize(Roles = "Data Entry")]
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPost(Router.GenreRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -47,7 +49,8 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
-        [Authorize(Roles = "Data Entry")]
+
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPut(Router.GenreRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -57,7 +60,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
-        [Authorize(Roles = "Data Entry")]
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpDelete(Router.GenreRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

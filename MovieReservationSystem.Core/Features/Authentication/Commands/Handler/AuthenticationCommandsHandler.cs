@@ -13,21 +13,25 @@ namespace MovieReservationSystem.Core.Features.Authentication.Commands.Handler
     public class AuthenticationCommandsHandler : ResponseHandler,
         IRequestHandler<SignInCommand, Response<JwtAuthTokenResponse>>,
         IRequestHandler<RefreshTokenCommand, Response<JwtAuthTokenResponse>>
+
     {
         #region Fields
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IUserService _userService;
+
 
         #endregion
         #region Constructors
-        public AuthenticationCommandsHandler(IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager, IAuthenticationService authenticationService)
+        public AuthenticationCommandsHandler(IMapper mapper, UserManager<User> userManager, SignInManager<User> signInManager, IAuthenticationService authenticationService, IUserService userService)
         {
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _authenticationService = authenticationService;
+            _userService = userService;
         }
         #endregion
         public async Task<Response<JwtAuthTokenResponse>> Handle(SignInCommand request, CancellationToken cancellationToken)
@@ -40,10 +44,13 @@ namespace MovieReservationSystem.Core.Features.Authentication.Commands.Handler
             //Check if Password is true for User
             var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (!signInResult.Succeeded)
-            {
                 return BadRequest<JwtAuthTokenResponse>(SharedResourcesKeys.IncorrectPassword);
-            }
 
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+            {
+                await _userService.SendConfirmUserEmailToken(user);
+                return BadRequest<JwtAuthTokenResponse>(SharedResourcesKeys.EmailNotConfirmed);
+            }
             //Generate JWTAuthToken
             var response = await _authenticationService.GetJwtTokenAsync(user);
 
@@ -65,5 +72,7 @@ namespace MovieReservationSystem.Core.Features.Authentication.Commands.Handler
             var result = await _authenticationService.CreateNewAccessTokenByRefreshToken(request.AccessToken, userRefreshToken);
             return Success(result);
         }
+
+
     }
 }

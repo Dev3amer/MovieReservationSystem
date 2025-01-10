@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using MovieReservationSystem.Core.Features.Authentication.Commands.Models;
-using MovieReservationSystem.Data.Entities.Identity;
 using MovieReservationSystem.Data.Resources;
 
 namespace MovieReservationSystem.Core.Features.Authentication.Commands.Validators
@@ -9,19 +7,14 @@ namespace MovieReservationSystem.Core.Features.Authentication.Commands.Validator
     public class SignInValidator : AbstractValidator<SignInCommand>
     {
         #region Fields
-        private readonly UserManager<User> _userManager;
         #endregion
 
         #region Constructors
-        public SignInValidator(UserManager<User> userManager)
+        public SignInValidator()
         {
-            _userManager = userManager;
             ApplyValidationRules();
-            ApplyCustomValidationRules();
         }
         #endregion
-
-
         private void ApplyValidationRules()
         {
             RuleFor(s => s.UserName)
@@ -31,10 +24,6 @@ namespace MovieReservationSystem.Core.Features.Authentication.Commands.Validator
             RuleFor(s => s.Password)
                 .NotNull().WithMessage(SharedResourcesKeys.NotNull)
                 .NotEmpty().WithMessage(SharedResourcesKeys.NotEmpty);
-        }
-        private void ApplyCustomValidationRules()
-        {
-
         }
     }
 }

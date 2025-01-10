@@ -27,6 +27,7 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
+
         #endregion
 
         #region Commands Actions

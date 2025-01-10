@@ -27,6 +27,8 @@ namespace MovieReservationSystem.Core.Features.Actors.Commands.Handler
         #endregion
         public async Task<Response<GetActorByIdResponse>> Handle(CreateActorCommand request, CancellationToken cancellationToken)
         {
+            request.FirstName = request.FirstName.Trim();
+            request.LastName = request.LastName.Trim();
 
             var actor = _mapper.Map<Actor>(request);
 
@@ -36,9 +38,13 @@ namespace MovieReservationSystem.Core.Features.Actors.Commands.Handler
         }
         public async Task<Response<GetActorByIdResponse>> Handle(EditActorCommand request, CancellationToken cancellationToken)
         {
+            request.FirstName = request.FirstName.Trim();
+            request.LastName = request.LastName.Trim();
+
             var oldActor = await _actorService.GetByIdAsync(request.ActorId);
             var mappedActor = _mapper.Map(request, oldActor);
             var savedActor = await _actorService.EditAsync(mappedActor);
+
             var response = _mapper.Map<GetActorByIdResponse>(savedActor);
             return Success(response);
         }
