@@ -11,6 +11,7 @@ namespace MovieReservationSystem.API.Controllers
 {
     //[Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Data Entry")]
     [ServiceFilter(typeof(DataEntryRoleFilter))]
     public class MoviesController : AppController
     {
@@ -23,6 +24,8 @@ namespace MovieReservationSystem.API.Controllers
         #region Queries Actions
         [HttpGet(Router.MovieRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetAllMoviesAsync()
         {
             var result = await _mediator.Send(new GetAllMoviesQuery());
@@ -53,7 +56,7 @@ namespace MovieReservationSystem.API.Controllers
         [HttpPost(Router.MovieRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateMovie([FromBody] CreateMovieCommand model)
+        public async Task<IActionResult> CreateMovie([FromForm] CreateMovieCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
@@ -62,7 +65,7 @@ namespace MovieReservationSystem.API.Controllers
         [HttpPut(Router.MovieRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> EditMovie([FromBody] EditMovieCommand model)
+        public async Task<IActionResult> EditMovie([FromForm] EditMovieCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);

@@ -22,14 +22,52 @@ namespace MovieReservationSystem.Service.Implementations
         #endregion
 
         #region Methods
-        public async Task<ICollection<Movie>> GetAllAsync()
+        public async Task<IEnumerable<Movie>> GetAllAsync()
         {
             return await _movieRepository.GetTableNoTracking()
-                .Include(m => m.Genres)
-                .Include(m => m.ShowTimes)
-                .Include(m => m.Actors).ThenInclude(a => a.Person)
-                .Include(m => m.Director).ThenInclude(a => a.Person)
-                .ToListAsync();
+                .Select(m => new Movie
+                {
+                    MovieId = m.MovieId,
+                    DurationInMinutes = m.DurationInMinutes,
+                    Description = m.Description,
+                    IsActive = m.IsActive,
+                    PosterURL = m.PosterURL,
+                    ReleaseYear = m.ReleaseYear,
+                    Rate = m.Rate,
+                    Title = m.Title,
+                    Genres = m.Genres.Select(mg =>
+                            new Genre { GenreId = mg.GenreId, Name = mg.Name }).ToList(),
+
+                    Actors = m.Actors.Select(ma =>
+                            new Actor
+                            {
+                                ActorId = ma.ActorId,
+                                Person = new Person
+                                {
+                                    FirstName = ma.Person.FirstName,
+                                    LastName = ma.Person.LastName,
+                                }
+                            }).ToList(),
+
+                    Director = new Director
+                    {
+                        DirectorId = m.Director.DirectorId,
+                        Person = new Person
+                        {
+                            FirstName = m.Director.Person.FirstName,
+                            LastName = m.Director.Person.LastName,
+                        }
+                    },
+
+                    ShowTimes = m.ShowTimes.Select(ms =>
+                            new ShowTime
+                            {
+                                ShowTimeId = ms.ShowTimeId,
+                                Day = ms.Day,
+                                StartTime = ms.StartTime,
+                                EndTime = ms.EndTime
+                            }).ToList(),
+                }).ToListAsync();
         }
 
         public async Task<Movie> GetByIdAsync(int id)
@@ -39,6 +77,7 @@ namespace MovieReservationSystem.Service.Implementations
                 .Include(m => m.ShowTimes)
                 .Include(m => m.Actors).ThenInclude(a => a.Person)
                 .Include(m => m.Director).ThenInclude(a => a.Person)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(m => m.MovieId == id);
         }
 
@@ -50,6 +89,7 @@ namespace MovieReservationSystem.Service.Implementations
                .Include(m => m.ShowTimes)
                .Include(m => m.Actors).ThenInclude(a => a.Person)
                .Include(m => m.Director).ThenInclude(a => a.Person)
+               .AsSplitQuery()
                .AsQueryable();
 
             if (search != null)

@@ -22,7 +22,7 @@ namespace MovieReservationSystem.Infrastructure.Config
 
             builder.Property(a => a.ImageURL)
                 .HasColumnType("NVARCHAR(max)")
-                .IsRequired(false);
+                .IsRequired();
 
             builder.Property(m => m.Bio)
                 .HasColumnType("NVARCHAR")

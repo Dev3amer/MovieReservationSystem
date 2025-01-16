@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using MovieReservationSystem.Core.Features.Directors.Commands.Models;
 using MovieReservationSystem.Core.Features.Directors.Queries.Results;
 using MovieReservationSystem.Core.Response;
@@ -16,13 +17,17 @@ namespace MovieReservationSystem.Core.Features.Directors.Commands.Handler
         #region Fields
         private readonly IDirectorService _directorService;
         private readonly IMapper _mapper;
+        private readonly IFileService _fileService;
+        private readonly IHttpContextAccessor _contextAccessor;
         #endregion
 
         #region Constructors
-        public DirectorCommandHandler(IDirectorService directorService, IMapper mapper)
+        public DirectorCommandHandler(IDirectorService directorService, IMapper mapper, IFileService fileService, IHttpContextAccessor contextAccessor)
         {
             _directorService = directorService;
             _mapper = mapper;
+            _fileService = fileService;
+            _contextAccessor = contextAccessor;
         }
         #endregion
         public async Task<Response<GetDirectorByIdResponse>> Handle(CreateDirectorCommand request, CancellationToken cancellationToken)
@@ -31,8 +36,21 @@ namespace MovieReservationSystem.Core.Features.Directors.Commands.Handler
             request.LastName = request.LastName.Trim();
 
             var director = _mapper.Map<Director>(request);
-            var savedDirector = await _directorService.AddAsync(director);
 
+            var baseURL = _contextAccessor.HttpContext.Request.Scheme + "://" + _contextAccessor.HttpContext.Request.Host + "/";
+            try
+            {
+                if (request.Image is null)
+                    director.Person.ImageURL = baseURL + _fileService.GetDefaultImagePath();
+                else
+                    director.Person.ImageURL = baseURL + await _fileService.SaveImageAsync(request.Image, "directors");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<GetDirectorByIdResponse>(ex.Message);
+            }
+
+            var savedDirector = await _directorService.AddAsync(director);
             var response = _mapper.Map<GetDirectorByIdResponse>(savedDirector);
             return Success(response);
         }
@@ -42,9 +60,26 @@ namespace MovieReservationSystem.Core.Features.Directors.Commands.Handler
             request.LastName = request.LastName.Trim();
 
             var oldDirector = await _directorService.GetByIdAsync(request.DirectorId);
-            var mappedDirector = _mapper.Map(request, oldDirector);
-            var savedDirector = await _directorService.EditAsync(mappedDirector);
+            var oldImage = oldDirector.Person.ImageURL;
 
+            var mappedDirector = _mapper.Map(request, oldDirector);
+
+            var baseURL = _contextAccessor.HttpContext.Request.Scheme + "://" + _contextAccessor.HttpContext.Request.Host + "/";
+            var oldImagePath = oldImage.Remove(0, baseURL.Length);
+
+            try
+            {
+                if (request.Image is not null)
+                {
+                    mappedDirector.Person.ImageURL = baseURL + await _fileService.ReplaceImageAsync(oldImagePath, request.Image, "directors");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest<GetDirectorByIdResponse>(ex.Message);
+            }
+
+            var savedDirector = await _directorService.EditAsync(mappedDirector);
             var response = _mapper.Map<GetDirectorByIdResponse>(savedDirector);
             return Success(response);
         }
@@ -54,7 +89,13 @@ namespace MovieReservationSystem.Core.Features.Directors.Commands.Handler
             var director = await _directorService.GetByIdAsync(request.DirectorId);
 
             var isDeleted = await _directorService.DeleteAsync(director);
-            return isDeleted ? Deleted<bool>() : BadRequest<bool>();
+            if (isDeleted)
+            {
+                var baseURL = _contextAccessor.HttpContext.Request.Scheme + "://" + _contextAccessor.HttpContext.Request.Host + "/";
+                _fileService.DeleteImage(director.Person.ImageURL.Remove(0, baseURL.Length));
+                return Deleted<bool>();
+            }
+            return BadRequest<bool>();
         }
     }
 }

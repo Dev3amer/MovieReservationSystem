@@ -28,6 +28,7 @@ namespace MovieReservationSystem.Core.Features.Actors.Commands.Validator
                 .NotNull().WithMessage(SharedResourcesKeys.NotNull)
                 .MaximumLength(55).WithMessage($"{SharedResourcesKeys.MaxLength} 55");
 
+
             RuleFor(a => a.Bio)
                 .NotEmpty().WithMessage(SharedResourcesKeys.NotEmpty)
                 .NotNull().WithMessage(SharedResourcesKeys.NotNull)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using MovieReservationSystem.Core.Features.Movies.Queries.Models;
 using MovieReservationSystem.Core.Features.Movies.Queries.Results;
 using MovieReservationSystem.Core.Features.Movies.Queries.Results.Shared;
@@ -18,10 +19,11 @@ namespace MovieReservationSystem.Core.Features.Movies.Queries.Handlers
         #region Fields
         private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
+
         #endregion
 
         #region Constructors
-        public MoviesQueryHandler(IMovieService movieService, IMapper mapper)
+        public MoviesQueryHandler(IMovieService movieService, IMapper mapper, IHttpContextAccessor contextAccessor)
         {
             _movieService = movieService;
             _mapper = mapper;

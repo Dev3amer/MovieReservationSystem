@@ -1,15 +1,12 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Actors.Commands.Models;
 using MovieReservationSystem.Core.Features.Actors.Queries.Models;
-using MovieReservationSystem.Core.Filters;
 using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
     public class ActorsController : AppController
     {
@@ -20,7 +17,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
-        [Authorize(Roles = "Data Entry")]
+        //[Authorize(Roles = "Data Entry")]
         [HttpGet(Router.ActorRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllActorsAsync()
@@ -40,27 +37,30 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-        [ServiceFilter(typeof(DataEntryRoleFilter))]
+        //[Authorize(Roles = "Data Entry")]
+        //[ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPost(Router.ActorRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateActor([FromBody] CreateActorCommand model)
+        public async Task<IActionResult> CreateActor([FromForm] CreateActorCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
 
-        [ServiceFilter(typeof(DataEntryRoleFilter))]
+        //[Authorize(Roles = "Data Entry")]
+        //[ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPut(Router.ActorRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> EditActor([FromBody] EditActorCommand model)
+        public async Task<IActionResult> EditActor([FromForm] EditActorCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
 
-        [ServiceFilter(typeof(DataEntryRoleFilter))]
+        //[Authorize(Roles = "Data Entry")]
+        //[ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpDelete(Router.ActorRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

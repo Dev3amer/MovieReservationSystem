@@ -47,5 +47,13 @@
         public const string EmailNotFound = "Email Not Found";
         public const string TryAgain = "Please Try Again";
         public const string IncorrectCode = "Incorrect Code";
+
+
+        public const string FileEmpty = "File is empty";
+        public const string FileSizeLimit = "File size exceeds maximum limit of";
+        public const string FileTypeNotAllowed = "Your file type is not allowed. Allowed types:";
+        public const string SavingError = "Error saving file";
+        public const string DeletingError = "Error deleting file";
+
     }
 }

@@ -9,9 +9,7 @@ using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class DirectorsController : AppController
     {
         #region Constructors
@@ -41,26 +39,29 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
+        [Authorize(Roles = "Data Entry")]
         [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPost(Router.DirectorRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateDirector([FromBody] CreateDirectorCommand model)
+        public async Task<IActionResult> CreateDirector([FromForm] CreateDirectorCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Data Entry")]
         [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPut(Router.DirectorRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> EditDirector([FromBody] EditDirectorCommand model)
+        public async Task<IActionResult> EditDirector([FromForm] EditDirectorCommand model)
         {
             var result = await _mediator.Send(model);
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Data Entry")]
         [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpDelete(Router.DirectorRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using MovieReservationSystem.Core.Features.Movies.Commands.Models;
-using MovieReservationSystem.Core.Features.Reservations.Commands.Models;
 using MovieReservationSystem.Data.Resources;
 using MovieReservationSystem.Service.Abstracts;
 
@@ -34,7 +33,7 @@ namespace MovieReservationSystem.Core.Features.Movies.Commands.Validators
                 .NotNull().WithMessage(SharedResourcesKeys.NotNull)
                 .MaximumLength(256).WithMessage($"{SharedResourcesKeys.MaxLength} 2500");
 
-            RuleFor(m => m.PosterURL)
+            RuleFor(m => m.Poster)
                 .NotEmpty().WithMessage(SharedResourcesKeys.NotEmpty)
                 .NotNull().WithMessage(SharedResourcesKeys.NotNull);
 

@@ -15,6 +15,8 @@ using MovieReservationSystem.Infrastructure;
 using MovieReservationSystem.Infrastructure.Context;
 using MovieReservationSystem.Infrastructure.Seeding;
 using MovieReservationSystem.Service;
+using MovieReservationSystem.Service.Abstracts;
+using MovieReservationSystem.Service.Implementations;
 using System.Text;
 
 namespace MovieReservationSystem.API
@@ -182,6 +184,14 @@ namespace MovieReservationSystem.API
             builder.Services.AddTransient<ReservationManagerRoleFilter>();
             #endregion
 
+            #region File Service
+            builder.Services.AddScoped<IFileService>(servicesProvider =>
+            {
+                var webHostEnvironment = servicesProvider.GetRequiredService<IWebHostEnvironment>();
+                return new FileService(webHostEnvironment.WebRootPath);
+            });
+            #endregion
+
             var app = builder.Build();
 
             #region Seeders
@@ -205,6 +215,7 @@ namespace MovieReservationSystem.API
             app.UseHttpsRedirection();
 
             app.UseCors(MyAllowSpecificOrigins);
+            app.UseStaticFiles();
 
             app.UseAuthentication();
             app.UseAuthorization();

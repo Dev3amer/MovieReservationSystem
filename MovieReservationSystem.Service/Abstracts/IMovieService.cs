@@ -5,7 +5,7 @@ namespace MovieReservationSystem.Service.Abstracts
 {
     public interface IMovieService
     {
-        Task<ICollection<Movie>> GetAllAsync();
+        Task<IEnumerable<Movie>> GetAllAsync();
         Task<Movie> GetByIdAsync(int id);
         IQueryable<Movie> GetAllQueryable(string search, MovieOrderingEnum? movieOrderingEnum);
         Task<Movie> AddAsync(Movie newMovie);

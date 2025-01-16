@@ -9,7 +9,8 @@ namespace MovieReservationSystem.Core.Mapping.MovieMapping
         {
             CreateMap<CreateMovieCommand, Movie>()
                 .ForMember(m => m.Genres, option => option.Ignore())
-                .ForMember(m => m.ShowTimes, option => option.Ignore());
+                .ForMember(m => m.ShowTimes, option => option.Ignore())
+                .ForMember(m => m.PosterURL, option => option.Ignore());
         }
     }
 }
