@@ -9,9 +9,7 @@ using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
-
     public class ReservationsController : AppController
     {
         #region Constructors
@@ -41,7 +39,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-        [Authorize(Roles = "Reservations Manager,User")]
+        [Authorize(Roles = "User")]
         [HttpPost(Router.ReservationRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

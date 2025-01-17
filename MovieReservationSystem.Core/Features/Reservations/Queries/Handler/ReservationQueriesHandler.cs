@@ -47,9 +47,9 @@ namespace MovieReservationSystem.Core.Features.Reservations.Queries.Handler
                 .Select(r => new GetReservationsPaginatedListResponse
                 {
                     ReservationId = r.ReservationId,
-                    ReservationDate = r.ReservationDate,
+                    ReservationDate = r.CreatedAt,
                     HallName = r.ShowTime.Hall.Name,
-                    Seats = r.Seats.Select(rs =>
+                    Seats = r.ReservedSeats.Select(rs =>
                             new SeatsInReservationResponse { SeatId = rs.SeatId, SeatNumber = rs.SeatNumber }),
                     User = new UserInReservationResponse { Id = r.User.Id, UserName = r.User.UserName },
 

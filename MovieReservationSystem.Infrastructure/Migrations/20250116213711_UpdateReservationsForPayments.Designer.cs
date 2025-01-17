@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieReservationSystem.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using MovieReservationSystem.Infrastructure.Context;
 namespace MovieReservationSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250116213711_UpdateReservationsForPayments")]
+    partial class UpdateReservationsForPayments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -546,26 +549,17 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
                     b.Property<decimal>("FinalPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PaymentIntentId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentStatus")
-                        .HasMaxLength(50)
-                        .HasColumnType("int");
+                    b.Property<DateTime>("ReservationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ShowTimeId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()

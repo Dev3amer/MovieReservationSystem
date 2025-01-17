@@ -161,12 +161,12 @@
             public const string Edit = Prefix + "Edit";
             public const string Delete = Prefix + SingleRoute;
         }
-        public static class EmailsRouting
+        public static class PaymentRouting
         {
-            public const string Prefix = Rule + "Email/";
+            public const string Prefix = Rule + "Payment/";
 
-            public const string Send = Prefix + "Send";
-
+            public const string Create = Prefix + "{reservationId}";
+            public const string webhook = Prefix + "webhook";
         }
     }
 }

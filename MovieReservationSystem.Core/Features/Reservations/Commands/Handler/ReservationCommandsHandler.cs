@@ -43,9 +43,9 @@ namespace MovieReservationSystem.Core.Features.Reservations.Commands.Handler
 
             var newReservation = new Reservation()
             {
-                ReservationDate = DateTime.Now,
+                CreatedAt = DateTime.Now,
                 FinalPrice = _reservationService.CalculateReservationPrice(seatsList, showTime.ShowTimePrice),
-                Seats = seatsList,
+                ReservedSeats = seatsList,
                 ShowTime = showTime,
                 User = user
             };

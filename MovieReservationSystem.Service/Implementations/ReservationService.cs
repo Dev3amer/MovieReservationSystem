@@ -29,9 +29,9 @@ namespace MovieReservationSystem.Service.Implementations
                 .ThenInclude(st => st.Movie) // Include Movie from ShowTime
             .Include(r => r.ShowTime)
                 .ThenInclude(st => st.Hall)  // Include Hall from ShowTime
-            .Include(r => r.Seats)
+            .Include(r => r.ReservedSeats)
             .AsSplitQuery()
-            .OrderBy(r => r.ReservationDate)
+            .OrderBy(r => r.CreatedAt)
             .ToListAsync();
         }
 
@@ -43,7 +43,7 @@ namespace MovieReservationSystem.Service.Implementations
                     .ThenInclude(st => st.Movie) // Include Movie from ShowTime
                 .Include(r => r.ShowTime)
                     .ThenInclude(st => st.Hall)  // Include Hall from ShowTime
-                .Include(r => r.Seats)
+                .Include(r => r.ReservedSeats)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(r => r.ReservationId == id);
         }
@@ -57,9 +57,9 @@ namespace MovieReservationSystem.Service.Implementations
                    .ThenInclude(st => st.Movie) // Include Movie from ShowTime
                .Include(r => r.ShowTime)
                    .ThenInclude(st => st.Hall)  // Include Hall from ShowTime
-               .Include(r => r.Seats)
+               .Include(r => r.ReservedSeats)
                .AsSplitQuery()
-               .OrderBy(r => r.ReservationDate)
+               .OrderBy(r => r.CreatedAt)
                .AsQueryable();
 
 
@@ -67,7 +67,7 @@ namespace MovieReservationSystem.Service.Implementations
             {
                 var dateTimeFromSearch = new DateTime(search.Value.Year, search.Value.Month, search.Value.Day);
 
-                queryableList = queryableList.Where(m => m.ReservationDate.Date.Equals(dateTimeFromSearch));
+                queryableList = queryableList.Where(m => m.CreatedAt.Date.Equals(dateTimeFromSearch));
             }
             return queryableList;
         }
@@ -107,9 +107,9 @@ namespace MovieReservationSystem.Service.Implementations
 
             return await _reservationRepository.GetTableNoTracking()
                 .Include(r => r.ShowTime)
-                .Include(r => r.Seats)
+                .Include(r => r.ReservedSeats)
                 .Where(r => r.ShowTime.ShowTimeId == showTimeId)
-                .AnyAsync(r => r.Seats.Any(rs => rs.SeatId == seatId));
+                .AnyAsync(r => r.ReservedSeats.Any(rs => rs.SeatId == seatId));
         }
         public decimal CalculateReservationPrice(IEnumerable<Seat> seatsList, decimal showTimePrice)
         {
@@ -121,16 +121,19 @@ namespace MovieReservationSystem.Service.Implementations
             price = price + (showTimePrice * seatsList.Count());
             return price;
         }
-        //public async Task<bool> IsExistByNameAsync(string key)
-        //{
-        //    return await _reservationRepository.GetTableNoTracking().AnyAsync(m => m.Title == key);
-        //}
 
-        //public async Task<bool> IsExistByNameExcludeItselfAsync(int id, string key)
-        //{
-        //    return await _reservationRepository.GetTableNoTracking().AnyAsync(m => m.Title == key && m.MovieId != id);
-
-        //}
+        public async Task<Reservation?> GetByPaymentIntentAsync(string paymentIntentId)
+        {
+            return await _reservationRepository.GetTableAsTracking()
+                .Include(r => r.User)
+                .Include(r => r.ShowTime)
+                    .ThenInclude(st => st.Movie) // Include Movie from ShowTime
+                .Include(r => r.ShowTime)
+                    .ThenInclude(st => st.Hall)  // Include Hall from ShowTime
+                .Include(r => r.ReservedSeats)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(r => r.PaymentIntentId == paymentIntentId);
+        }
         #endregion
     }
 }

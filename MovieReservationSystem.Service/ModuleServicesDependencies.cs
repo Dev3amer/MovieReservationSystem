@@ -22,6 +22,7 @@ namespace MovieReservationSystem.Service
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IPaymentService, PaymentService>();
         }
     }
 }

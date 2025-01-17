@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.Actors.Commands.Models;
 using MovieReservationSystem.Core.Features.Actors.Queries.Models;
+using MovieReservationSystem.Core.Filters;
 using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
@@ -17,7 +19,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
-        //[Authorize(Roles = "Data Entry")]
+        [Authorize(Roles = "Data Entry")]
         [HttpGet(Router.ActorRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllActorsAsync()
@@ -37,8 +39,8 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
-        //[Authorize(Roles = "Data Entry")]
-        //[ServiceFilter(typeof(DataEntryRoleFilter))]
+        [Authorize(Roles = "Data Entry")]
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPost(Router.ActorRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -48,8 +50,8 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
-        //[Authorize(Roles = "Data Entry")]
-        //[ServiceFilter(typeof(DataEntryRoleFilter))]
+        [Authorize(Roles = "Data Entry")]
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPut(Router.ActorRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -59,8 +61,8 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
-        //[Authorize(Roles = "Data Entry")]
-        //[ServiceFilter(typeof(DataEntryRoleFilter))]
+        [Authorize(Roles = "Data Entry")]
+        [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpDelete(Router.ActorRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

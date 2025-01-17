@@ -12,8 +12,7 @@ namespace MovieReservationSystem.Service.Abstracts
         Task<bool> IsExistAsync(int id);
         Task<bool> IsSeatReservedInSameShowTimeAsync(int seatId, int showTimeId);
         public decimal CalculateReservationPrice(IEnumerable<Seat> seatsList, decimal showTimePrice);
-        //Task<bool> IsExistByNameAsync(string key);
-        //Task<bool> IsExistByNameExcludeItselfAsync(int id, string key);
         Task<bool> DeleteAsync(Reservation reservation);
+        Task<Reservation?> GetByPaymentIntentAsync(string paymentIntentId);
     }
 }

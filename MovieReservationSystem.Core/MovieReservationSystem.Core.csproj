@@ -22,6 +22,9 @@
 
   <ItemGroup>
     <Folder Include="Features\Authentication\Queries\Results\" />
+    <Folder Include="Features\Payments\Commands\Handler\" />
+    <Folder Include="Features\Payments\Commands\Models\" />
+    <Folder Include="Features\Payments\Commands\Validator\" />
     <Folder Include="Mapping\ReservationMapping\CommandsMapping\" />
   </ItemGroup>
 

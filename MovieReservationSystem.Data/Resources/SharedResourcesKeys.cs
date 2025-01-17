@@ -55,5 +55,9 @@
         public const string SavingError = "Error saving file";
         public const string DeletingError = "Error deleting file";
 
+
+
+
+        public const string ReservationError = "Error in your reservation";
     }
 }

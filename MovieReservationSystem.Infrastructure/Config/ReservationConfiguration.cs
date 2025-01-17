@@ -10,7 +10,15 @@ namespace MovieReservationSystem.Infrastructure.Config
         {
             builder.HasKey(r => r.ReservationId);
 
+            builder.Property(r => r.PaymentStatus)
+               .IsRequired()
+               .HasMaxLength(50);
 
+            builder.Property(r => r.FinalPrice)
+               .HasColumnType("decimal(18,2)");
+
+            builder.Property(r => r.CreatedAt)
+               .HasDefaultValueSql("GETUTCDATE()");
 
             // Reservation has one User
             builder.HasOne(r => r.User)
@@ -27,7 +35,7 @@ namespace MovieReservationSystem.Infrastructure.Config
 
 
             // Many-to-many relationship between Reservation and Seat through ReservationSeat
-            builder.HasMany(r => r.Seats)
+            builder.HasMany(r => r.ReservedSeats)
                 .WithMany(s => s.Reservations)
                 .UsingEntity<ReservationSeat>();
 
