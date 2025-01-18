@@ -52,9 +52,9 @@ The **Movie Reservation System** offers the following key features:
 
 9. **Email Services**
 
-- The system integrates email services to enhance user experience:
-  Email Confirmation: Upon registration, users receive a verification email with a confirmation link to verify their email address.
-  Password Reset: Users who forget their passwords can request a reset email, which contains a link and secure token to reset their password.
+- The system integrates email services to enhance user experience by:
+  - Email Confirmation: Upon registration, users receive a verification email with a confirmation link to verify their email address.
+  - Password Reset: Users who forget their passwords can request a reset email, which contains a link and secure token to reset their password.
 
 ## Technologies Used
 
