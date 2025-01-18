@@ -1,6 +1,6 @@
 # Movie Reservation System API
 
-Welcome to the **Movie Reservation System API**! This platform allows users to search for movies, reserve tickets, and view showtimes, all while providing seamless interactions and secure booking for moviegoers. The project is developed by **Me** with a focus on building an intuitive, secure backend using **ASP.NET Core**.
+Welcome to the **Movie Reservation System API**! This platform allows users to search for movies, reserve tickets, and view show times, all while providing seamless interactions and secure booking for moviegoers. The project is developed by **Me** with a focus on building an intuitive, secure backend using **ASP.NET Core**.
 
 ## Table of Contents
 
@@ -13,6 +13,48 @@ Welcome to the **Movie Reservation System API**! This platform allows users to s
 ## Features
 
 The **Movie Reservation System** offers the following key features:
+
+1. **User Authentication and Authorization**
+
+- Authentication Services: User sign-in, token validation, and secure refresh token mechanisms provide a seamless and safe login experience.
+- Role-Based Access Control: Administrative tools to manage user roles and permissions, ensuring robust security and efficient access management.
+
+2. **Role and Permission Management**
+
+- Create and modify roles tailored to specific user groups.
+- Assign and update roles for individual users dynamically.
+- Comprehensive queries to fetch all roles, individual role details, or user-specific permissions.
+
+3. **Movie and Show Times Management**
+
+- Effortlessly manage a dynamic catalog of movies, complete with details like descriptions, ratings, genres, and schedules for upcoming Show times.
+
+4. **Cast and Crew Management**
+
+- Handle detailed profiles for actors and directors, linking them to their respective movies to give users deeper insights into the cinema's offerings.
+
+5. **Halls and Seats Management**
+
+- Organize cinema halls with support for various seating layouts and capacity configurations. Track seat availability and customize seat pricing by type.
+
+6. **Flexible Scheduling**
+
+- Set up movie schedules with start and end times, price adjustments for show times, and integration with hall availability.
+
+7. **Reservation Management**
+
+- Customers can easily reserve seats for their favorite movies, with real-time updates ensuring only available seats are displayed.
+
+8. **Payment Integration**
+
+- handles the secure payment process for ticket bookings bu integrating with stripe, ensuring users can easily make payments for their reservations.
+  It works seamlessly with the reservation and ticketing system, allowing for real-time updates of available seats and payment statuses.
+
+9. **Email Services**
+
+- The system integrates email services to enhance user experience:
+  Email Confirmation: Upon registration, users receive a verification email with a confirmation link to verify their email address.
+  Password Reset: Users who forget their passwords can request a reset email, which contains a link and secure token to reset their password.
 
 ## Technologies Used
 
@@ -78,6 +120,7 @@ To set up the project locally, follow these steps:
 2. **Navigate to the project directory and restore the dependencies**:
 
    ```bash
+   cd ArabTube
    dotnet restore
    ```
 
@@ -90,6 +133,6 @@ To set up the project locally, follow these steps:
    ```
 
 Start the application:
-```bash
+`bash
     dotnet run
-```
+    `
