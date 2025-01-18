@@ -17,15 +17,17 @@ namespace MovieReservationSystem.Core.Features.Seats.Queries.Handler
         #region Fields
         private readonly ISeatService _seatService;
         private readonly IReservationService _reservationService;
+        private readonly IShowTimeService _showTimeService;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructors
-        public SeatQueryHandler(ISeatService seatService, IMapper mapper, IReservationService reservationService)
+        public SeatQueryHandler(ISeatService seatService, IMapper mapper, IReservationService reservationService, IShowTimeService showTimeService)
         {
             _seatService = seatService;
             _mapper = mapper;
             _reservationService = reservationService;
+            _showTimeService = showTimeService;
         }
         #endregion
         public async Task<Response<List<GetAllSeatsResponse>>> Handle(GetAllSeatsQuery request, CancellationToken cancellationToken)
@@ -51,10 +53,11 @@ namespace MovieReservationSystem.Core.Features.Seats.Queries.Handler
 
         public async Task<Response<List<GetFreeSeatsInShowTimeResponse>>> Handle(GetFreeSeatsInShowTimeQuery request, CancellationToken cancellationToken)
         {
-            var hallId = await _seatService.GetAllQueryable()
-            .Where(s => s.Reservations.Any(r => r.ShowTime.ShowTimeId == request.ShowTimeId))
-            .Select(s => s.Hall.HallId)
-            .FirstOrDefaultAsync();
+            var showTime = await _showTimeService.GetByIdAsync(request.ShowTimeId);
+            if (showTime is null)
+                return BadRequest<List<GetFreeSeatsInShowTimeResponse>>(SharedResourcesKeys.Invalid);
+
+            var hallId = showTime.Hall.HallId;
 
             await _reservationService.DeleteNotCompletedReservations();
 
