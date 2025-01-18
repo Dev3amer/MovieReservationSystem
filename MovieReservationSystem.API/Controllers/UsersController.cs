@@ -38,6 +38,16 @@ namespace MovieReservationSystem.API.Controllers
             var result = await _mediator.Send(new GetUserByIdQuery() { Id = id });
             return NewResult(result);
         }
+
+        [Authorize(Roles = "User,Reservation Manager")]
+        [HttpGet(Router.UserRouting.UserReservations)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetUserReservationsAsync(string id)
+        {
+            var result = await _mediator.Send(new GetUserReservationsHistoryQuery() { Id = id });
+            return NewResult(result);
+        }
         #endregion
 
         #region Commands Actions

@@ -3,7 +3,6 @@
     public enum PaymentStatusEnum
     {
         Pending,
-        Processing,
         Completed,
         Failed,
     }

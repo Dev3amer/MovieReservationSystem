@@ -19,6 +19,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+        [Authorize(Roles = "Reservations Manager")]
         [ServiceFilter(typeof(ReservationManagerRoleFilter))]
         [HttpGet(Router.ReservationRouting.PaginatedList)]
         [ProducesResponseType(StatusCodes.Status200OK)]

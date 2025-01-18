@@ -53,11 +53,11 @@ namespace MovieReservationSystem.Service.Implementations
 
             var queryableList = _reservationRepository.GetTableNoTracking()
                .Include(r => r.User)
+               .Include(r => r.ReservedSeats)
                .Include(r => r.ShowTime)
                    .ThenInclude(st => st.Movie) // Include Movie from ShowTime
                .Include(r => r.ShowTime)
                    .ThenInclude(st => st.Hall)  // Include Hall from ShowTime
-               .Include(r => r.ReservedSeats)
                .AsSplitQuery()
                .OrderBy(r => r.CreatedAt)
                .AsQueryable();

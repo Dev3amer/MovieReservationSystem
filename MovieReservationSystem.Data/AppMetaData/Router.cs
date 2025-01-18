@@ -119,6 +119,7 @@
             public const string Edit = Prefix + "Edit";
             public const string ChangePassword = Prefix + "ChangePassword";
             public const string Delete = Prefix + SingleRoute;
+            public const string UserReservations = Prefix + "Reservations/" + SingleRoute;
             public const string ConfirmEmail = "Api/V1/User/ConfirmEmail";
             public const string RequestPasswordReset = Prefix + "RequestPasswordReset";
             public const string ValidatePasswordResetCode = Prefix + "ValidatePasswordResetCode";
