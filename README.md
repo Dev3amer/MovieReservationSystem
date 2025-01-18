@@ -120,7 +120,6 @@ To set up the project locally, follow these steps:
 2. **Navigate to the project directory and restore the dependencies**:
 
    ```bash
-   cd ArabTube
    dotnet restore
    ```
 
