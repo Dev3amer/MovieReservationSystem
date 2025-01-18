@@ -120,12 +120,20 @@ namespace MovieReservationSystem.Service.Implementations
         {
 
             // Generate JWT Security Token
-            var user = await _userManager.FindByIdAsync(userRefreshToken.userID);
+            //var user = await _userManager.FindByIdAsync(userRefreshToken.userID);
+            var userId = ReadJwtToken(accessToken).Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            var user = await _userManager.FindByIdAsync(userId);
 
             var generatedJwtSecurityToken = await GenerateJwtSecurityTokenAsync(user);
             var NewAccessToken = new JwtSecurityTokenHandler().WriteToken(generatedJwtSecurityToken);
 
+
             var refreshTokenForResponse = GetRefreshTokenForResponse(userRefreshToken.ExpiryDate, user.UserName, userRefreshToken.RefreshToken);
+
+
+            userRefreshToken.Token = NewAccessToken;
+            await _refreshTokenRepository.UpdateAsync(userRefreshToken);
+
             return new JwtAuthTokenResponse()
             {
                 AccessToken = NewAccessToken,
@@ -198,7 +206,7 @@ namespace MovieReservationSystem.Service.Implementations
         }
         public async Task<UserRefreshToken> GetUserFullRefreshTokenObjByRefreshToken(string refreshToken)
         {
-            return await _refreshTokenRepository.GetTableNoTracking()
+            return await _refreshTokenRepository.GetTableAsTracking()
                 .Where(r => r.RefreshToken == refreshToken)
                 .FirstOrDefaultAsync();
         }
