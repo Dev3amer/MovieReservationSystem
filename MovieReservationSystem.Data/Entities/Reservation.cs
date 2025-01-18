@@ -15,7 +15,6 @@ namespace MovieReservationSystem.Data.Entities
 
         // Audit fields
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
 
         public int ShowTimeId { get; set; }
         public string UserId { get; set; } = default!;
@@ -23,5 +22,7 @@ namespace MovieReservationSystem.Data.Entities
         public virtual ICollection<Seat> ReservedSeats { get; set; } = new HashSet<Seat>();
         public virtual User User { get; set; } = new();
 
+
+        public DateTime AllowedTime { get; set; } = DateTime.Now.AddMinutes(15);
     }
 }

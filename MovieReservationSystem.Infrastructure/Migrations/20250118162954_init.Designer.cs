@@ -12,8 +12,8 @@ using MovieReservationSystem.Infrastructure.Context;
 namespace MovieReservationSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250117150127_UpdateReservationTable")]
-    partial class UpdateReservationTable
+    [Migration("20250118162954_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -546,6 +546,9 @@ namespace MovieReservationSystem.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
 
+                    b.Property<DateTime>("AllowedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
 
@@ -564,14 +567,8 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ReservationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("ShowTimeId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()

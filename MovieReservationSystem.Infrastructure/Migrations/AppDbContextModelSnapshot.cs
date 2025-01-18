@@ -543,6 +543,9 @@ namespace MovieReservationSystem.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservationId"));
 
+                    b.Property<DateTime>("AllowedTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ClientSecret")
                         .HasColumnType("nvarchar(max)");
 
@@ -563,9 +566,6 @@ namespace MovieReservationSystem.Infrastructure.Migrations
 
                     b.Property<int>("ShowTimeId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()

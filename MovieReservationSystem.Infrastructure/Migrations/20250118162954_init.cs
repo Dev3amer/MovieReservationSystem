@@ -32,8 +32,9 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "NVARCHAR(55)", maxLength: 55, nullable: false),
+                    LastName = table.Column<string>(type: "NVARCHAR(55)", maxLength: 55, nullable: false),
+                    Code = table.Column<string>(type: "NVARCHAR(2000)", maxLength: 2000, nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -89,7 +90,7 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "NVARCHAR(55)", maxLength: 55, nullable: false),
                     LastName = table.Column<string>(type: "NVARCHAR(55)", maxLength: 55, nullable: false),
-                    ImageURL = table.Column<string>(type: "NVARCHAR(max)", nullable: true),
+                    ImageURL = table.Column<string>(type: "NVARCHAR(max)", nullable: false),
                     BirthDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Bio = table.Column<string>(type: "NVARCHAR(2500)", maxLength: 2500, nullable: false)
                 },
@@ -417,10 +418,14 @@ namespace MovieReservationSystem.Infrastructure.Migrations
                 {
                     ReservationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ReservationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FinalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClientSecret = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PaymentStatus = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     ShowTimeId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AllowedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

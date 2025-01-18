@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MovieReservationSystem.Data.Entities;
+using MovieReservationSystem.Data.Helpers;
 using MovieReservationSystem.Infrastructure.Repositories;
 using MovieReservationSystem.Service.Abstracts;
 
@@ -133,6 +134,16 @@ namespace MovieReservationSystem.Service.Implementations
                 .Include(r => r.ReservedSeats)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(r => r.PaymentIntentId == paymentIntentId);
+        }
+
+        public async Task<int> DeleteNotCompletedReservations()
+        {
+            var notCompletedReservations = await _reservationRepository.GetTableAsTracking()
+                .Where(r => r.AllowedTime < DateTime.Now && r.PaymentStatus != PaymentStatusEnum.Completed).ToListAsync();
+
+            await _reservationRepository.DeleteRangeAsync(notCompletedReservations);
+
+            return notCompletedReservations.Count;
         }
         #endregion
     }

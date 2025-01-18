@@ -29,6 +29,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [AllowAnonymous]
         [HttpGet(Router.SeatRouting.FreeSeatsInShowTime)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetFreeSeatsInShowTimeAsync([FromRoute] int showTimeId)

@@ -14,5 +14,6 @@ namespace MovieReservationSystem.Service.Abstracts
         public decimal CalculateReservationPrice(IEnumerable<Seat> seatsList, decimal showTimePrice);
         Task<bool> DeleteAsync(Reservation reservation);
         Task<Reservation?> GetByPaymentIntentAsync(string paymentIntentId);
+        Task<int> DeleteNotCompletedReservations();
     }
 }

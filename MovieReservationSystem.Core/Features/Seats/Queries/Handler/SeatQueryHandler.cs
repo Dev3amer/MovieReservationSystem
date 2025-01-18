@@ -16,14 +16,16 @@ namespace MovieReservationSystem.Core.Features.Seats.Queries.Handler
     {
         #region Fields
         private readonly ISeatService _seatService;
+        private readonly IReservationService _reservationService;
         private readonly IMapper _mapper;
         #endregion
 
         #region Constructors
-        public SeatQueryHandler(ISeatService seatService, IMapper mapper)
+        public SeatQueryHandler(ISeatService seatService, IMapper mapper, IReservationService reservationService)
         {
             _seatService = seatService;
             _mapper = mapper;
+            _reservationService = reservationService;
         }
         #endregion
         public async Task<Response<List<GetAllSeatsResponse>>> Handle(GetAllSeatsQuery request, CancellationToken cancellationToken)
@@ -53,6 +55,8 @@ namespace MovieReservationSystem.Core.Features.Seats.Queries.Handler
             .Where(s => s.Reservations.Any(r => r.ShowTime.ShowTimeId == request.ShowTimeId))
             .Select(s => s.Hall.HallId)
             .FirstOrDefaultAsync();
+
+            await _reservationService.DeleteNotCompletedReservations();
 
             var freeSeatsList = await _seatService.GetAllQueryable()
                 .Where(s => !s.Reservations.Any(r => r.ShowTime.ShowTimeId == request.ShowTimeId) &&

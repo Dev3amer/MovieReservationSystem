@@ -37,12 +37,27 @@ namespace MovieReservationSystem.API
             //Swagger Gn
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Movie Reservation System", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Movie Reservation System",
+                    Version = "V1",
+                    Description = "An API for managing movie reservations, providing endpoints for users to:<br>" +
+                                  "- Browse movies and view showtimes<br>" +
+                                  "- Reserve tickets and manage bookings<br>" +
+                                  "- Check seat availability and process payments<br><br>" +
+                                  "Designed for efficient and user-friendly integration with web and mobile applications.",
+                    Contact = new OpenApiContact()
+                    {
+                        Name = "Mohamed Amer",
+                        Email = "mohamedamer8921@gmail.com",
+                        Url = new Uri("https://www.linkedin.com/in/mohamed-m-aamer/")
+                    }
+                });
                 c.EnableAnnotations();
 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
@@ -50,36 +65,21 @@ namespace MovieReservationSystem.API
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-            {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = JwtBearerDefaults.AuthenticationScheme
-                }
-            },
-            Array.Empty<string>()
-            }
-           });
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
-            //builder.Services.AddAuthorization(option =>
-            //{
-            //    option.AddPolicy("CreateStudent", policy =>
-            //    {
-            //        policy.RequireClaim("Create Student", "True");
-            //    });
-            //    option.AddPolicy("DeleteStudent", policy =>
-            //    {
-            //        policy.RequireClaim("Delete Student", "True");
-            //    });
-            //    option.AddPolicy("EditStudent", policy =>
-            //    {
-            //        policy.RequireClaim("Edit Student", "True");
-            //    });
-            //});
             #endregion
 
             #region DbContext
