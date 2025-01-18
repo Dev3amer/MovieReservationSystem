@@ -10,6 +10,7 @@ namespace MovieReservationSystem.Core.Features.ShowTimes.Queries.Handler
 {
     public class ShowTimeQueryHandler : ResponseHandler,
         IRequestHandler<GetAllShowTimesQuery, Response<List<GetAllShowTimesResponse>>>,
+        IRequestHandler<GetComingShowTimesQuery, Response<List<GetAllShowTimesResponse>>>,
         IRequestHandler<GetShowTimeByIdQuery, Response<GetShowTimeByIdResponse>>
     {
         #region Fields
@@ -43,6 +44,15 @@ namespace MovieReservationSystem.Core.Features.ShowTimes.Queries.Handler
             var mappedShowTime = _mapper.Map<GetShowTimeByIdResponse>(showTime);
 
             return Success(mappedShowTime);
+        }
+
+        public async Task<Response<List<GetAllShowTimesResponse>>> Handle(GetComingShowTimesQuery request, CancellationToken cancellationToken)
+        {
+            var showTimesList = await _showTimeService.GetComingShowTimesAsync();
+
+            var mappedShowTimesList = _mapper.Map<List<GetAllShowTimesResponse>>(showTimesList);
+
+            return Success(mappedShowTimesList);
         }
     }
 }

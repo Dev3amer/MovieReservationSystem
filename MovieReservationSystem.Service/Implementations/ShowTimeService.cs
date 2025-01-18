@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using MovieReservationSystem.Data.Entities;
+using MovieReservationSystem.Infrastructure.Context;
 using MovieReservationSystem.Infrastructure.Repositories;
 using MovieReservationSystem.Service.Abstracts;
 
@@ -9,12 +11,14 @@ namespace MovieReservationSystem.Service.Implementations
     {
         #region Fields
         private readonly IShowTimeRepository _showTimeRepository;
+        private readonly AppDbContext _appDbContext;
         #endregion
 
         #region Constructors
-        public ShowTimeService(IShowTimeRepository showTimeRepository)
+        public ShowTimeService(IShowTimeRepository showTimeRepository, AppDbContext appDbContext)
         {
             _showTimeRepository = showTimeRepository;
+            _appDbContext = appDbContext;
         }
         #endregion
 
@@ -84,6 +88,19 @@ namespace MovieReservationSystem.Service.Implementations
         {
             var showTime = await _showTimeRepository.GetTableAsTracking().FirstOrDefaultAsync(st => st.ShowTimeId == showTimeId);
             return showTime.Day.ToDateTime(showTime.EndTime) > DateTime.Now;
+        }
+
+        public async Task<ICollection<ShowTime>> GetComingShowTimesAsync()
+        {
+            return await _appDbContext.ShowTimes
+                .FromSqlRaw(
+                    @"SELECT * FROM ShowTimes
+                    WHERE DATEADD(MINUTE, DATEDIFF(MINUTE, '00:00', EndTime), CAST(Day AS DATETIME)) > @CurrentDateTime",
+                    new SqlParameter("@CurrentDateTime", DateTime.Now)
+                )
+                .Include(st => st.Movie)
+                .Include(st => st.Hall)
+                .ToListAsync();
         }
         #endregion
     }

@@ -5,6 +5,7 @@ namespace MovieReservationSystem.Service.Abstracts
     public interface IShowTimeService
     {
         Task<ICollection<ShowTime>> GetAllAsync();
+        Task<ICollection<ShowTime>> GetComingShowTimesAsync();
         Task<ShowTime> GetByIdAsync(int showTime);
         Task<ShowTime> AddAsync(ShowTime showTime);
         Task<ShowTime> EditAsync(ShowTime showTime);

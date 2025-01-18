@@ -99,6 +99,7 @@
             public const string Prefix = Rule + "ShowTime/";
 
             public const string list = Prefix + "List";
+            public const string comingList = Prefix + "ComingList";
             public const string GetById = Prefix + SingleRoute;
 
 

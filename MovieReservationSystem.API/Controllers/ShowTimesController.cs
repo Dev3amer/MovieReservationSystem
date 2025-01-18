@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieReservationSystem.API.APIBases;
 using MovieReservationSystem.Core.Features.ShowTimes.Commands.Models;
@@ -8,7 +9,6 @@ using MovieReservationSystem.Data.AppMetaData;
 
 namespace MovieReservationSystem.API.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
     public class ShowTimesController : AppController
     {
@@ -19,11 +19,21 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Queries Actions
+        [Authorize]
+        [Authorize(Roles = "Data Entry")]
         [HttpGet(Router.ShowTimeRouting.list)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllShowTimesAsync()
         {
             var result = await _mediator.Send(new GetAllShowTimesQuery());
+            return NewResult(result);
+        }
+
+        [HttpGet(Router.ShowTimeRouting.comingList)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetComingShowTimesAsync()
+        {
+            var result = await _mediator.Send(new GetComingShowTimesQuery());
             return NewResult(result);
         }
 
@@ -38,6 +48,7 @@ namespace MovieReservationSystem.API.Controllers
         #endregion
 
         #region Commands Actions
+        [Authorize(Roles = "Data Entry")]
         [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPost(Router.ShowTimeRouting.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -48,6 +59,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Data Entry")]
         [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpPut(Router.ShowTimeRouting.Edit)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -58,6 +70,7 @@ namespace MovieReservationSystem.API.Controllers
             return NewResult(result);
         }
 
+        [Authorize(Roles = "Data Entry")]
         [ServiceFilter(typeof(DataEntryRoleFilter))]
         [HttpDelete(Router.ShowTimeRouting.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
